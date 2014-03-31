@@ -1,0 +1,545 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		26C94B31981E41A4AC76DB67 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87AE41D9194C4E51B137799E /* libPods.a */; };
+		B824A86E18DFFDCC00679203 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B824A86D18DFFDCC00679203 /* TableViewCell.m */; };
+		B84E0DF618DF0ADA005586D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0DF518DF0ADA005586D1 /* Foundation.framework */; };
+		B84E0DF818DF0ADA005586D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0DF718DF0ADA005586D1 /* CoreGraphics.framework */; };
+		B84E0DFA18DF0ADA005586D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0DF918DF0ADA005586D1 /* UIKit.framework */; };
+		B84E0E0018DF0ADA005586D1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B84E0DFE18DF0ADA005586D1 /* InfoPlist.strings */; };
+		B84E0E0218DF0ADA005586D1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B84E0E0118DF0ADA005586D1 /* main.m */; };
+		B84E0E0618DF0ADA005586D1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B84E0E0518DF0ADA005586D1 /* AppDelegate.m */; };
+		B84E0E0918DF0ADA005586D1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B84E0E0718DF0ADA005586D1 /* Main.storyboard */; };
+		B84E0E0E18DF0ADA005586D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B84E0E0D18DF0ADA005586D1 /* Images.xcassets */; };
+		B84E0E1518DF0ADA005586D1 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0E1418DF0ADA005586D1 /* XCTest.framework */; };
+		B84E0E1618DF0ADA005586D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0DF518DF0ADA005586D1 /* Foundation.framework */; };
+		B84E0E1718DF0ADA005586D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0DF918DF0ADA005586D1 /* UIKit.framework */; };
+		B84E0E1F18DF0ADA005586D1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B84E0E1D18DF0ADA005586D1 /* InfoPlist.strings */; };
+		B84E0E2118DF0ADA005586D1 /* YSImageRequestExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B84E0E2018DF0ADA005586D1 /* YSImageRequestExampleTests.m */; };
+		B84E0E2D18DF0C49005586D1 /* YSImageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B84E0E2C18DF0C49005586D1 /* YSImageRequest.m */; };
+		B84E0E3018DF0CE6005586D1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B84E0E2F18DF0CE6005586D1 /* ViewController.m */; };
+		B84E0E3318DF1C0D005586D1 /* TwitPicImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B84E0E3218DF1C0D005586D1 /* TwitPicImage.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B84E0E1818DF0ADA005586D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B84E0DEA18DF0ADA005586D1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B84E0DF118DF0ADA005586D1;
+			remoteInfo = YSImageRequestExample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		52E2611CF8C44C60ABE2F344 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		87AE41D9194C4E51B137799E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B824A86C18DFFDCC00679203 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
+		B824A86D18DFFDCC00679203 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
+		B84E0DF218DF0ADA005586D1 /* YSImageRequestExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YSImageRequestExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B84E0DF518DF0ADA005586D1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		B84E0DF718DF0ADA005586D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		B84E0DF918DF0ADA005586D1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		B84E0DFD18DF0ADA005586D1 /* YSImageRequestExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "YSImageRequestExample-Info.plist"; sourceTree = "<group>"; };
+		B84E0DFF18DF0ADA005586D1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B84E0E0118DF0ADA005586D1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B84E0E0318DF0ADA005586D1 /* YSImageRequestExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YSImageRequestExample-Prefix.pch"; sourceTree = "<group>"; };
+		B84E0E0418DF0ADA005586D1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		B84E0E0518DF0ADA005586D1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		B84E0E0818DF0ADA005586D1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B84E0E0D18DF0ADA005586D1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B84E0E1318DF0ADA005586D1 /* YSImageRequestExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YSImageRequestExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B84E0E1418DF0ADA005586D1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		B84E0E1C18DF0ADA005586D1 /* YSImageRequestExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "YSImageRequestExampleTests-Info.plist"; sourceTree = "<group>"; };
+		B84E0E1E18DF0ADA005586D1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B84E0E2018DF0ADA005586D1 /* YSImageRequestExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YSImageRequestExampleTests.m; sourceTree = "<group>"; };
+		B84E0E2B18DF0C49005586D1 /* YSImageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YSImageRequest.h; sourceTree = "<group>"; };
+		B84E0E2C18DF0C49005586D1 /* YSImageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YSImageRequest.m; sourceTree = "<group>"; };
+		B84E0E2E18DF0CE6005586D1 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		B84E0E2F18DF0CE6005586D1 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		B84E0E3118DF1C0D005586D1 /* TwitPicImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitPicImage.h; sourceTree = "<group>"; };
+		B84E0E3218DF1C0D005586D1 /* TwitPicImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitPicImage.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B84E0DEF18DF0ADA005586D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B84E0DF818DF0ADA005586D1 /* CoreGraphics.framework in Frameworks */,
+				B84E0DFA18DF0ADA005586D1 /* UIKit.framework in Frameworks */,
+				B84E0DF618DF0ADA005586D1 /* Foundation.framework in Frameworks */,
+				26C94B31981E41A4AC76DB67 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B84E0E1018DF0ADA005586D1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B84E0E1518DF0ADA005586D1 /* XCTest.framework in Frameworks */,
+				B84E0E1718DF0ADA005586D1 /* UIKit.framework in Frameworks */,
+				B84E0E1618DF0ADA005586D1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B84E0DE918DF0ADA005586D1 = {
+			isa = PBXGroup;
+			children = (
+				B84E0DFB18DF0ADA005586D1 /* YSImageRequestExample */,
+				B84E0E2A18DF0B25005586D1 /* YSImageRequest */,
+				B84E0E1A18DF0ADA005586D1 /* YSImageRequestExampleTests */,
+				B84E0DF418DF0ADA005586D1 /* Frameworks */,
+				B84E0DF318DF0ADA005586D1 /* Products */,
+				52E2611CF8C44C60ABE2F344 /* Pods.xcconfig */,
+			);
+			sourceTree = "<group>";
+		};
+		B84E0DF318DF0ADA005586D1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B84E0DF218DF0ADA005586D1 /* YSImageRequestExample.app */,
+				B84E0E1318DF0ADA005586D1 /* YSImageRequestExampleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B84E0DF418DF0ADA005586D1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B84E0DF518DF0ADA005586D1 /* Foundation.framework */,
+				B84E0DF718DF0ADA005586D1 /* CoreGraphics.framework */,
+				B84E0DF918DF0ADA005586D1 /* UIKit.framework */,
+				B84E0E1418DF0ADA005586D1 /* XCTest.framework */,
+				87AE41D9194C4E51B137799E /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B84E0DFB18DF0ADA005586D1 /* YSImageRequestExample */ = {
+			isa = PBXGroup;
+			children = (
+				B84E0E0418DF0ADA005586D1 /* AppDelegate.h */,
+				B84E0E0518DF0ADA005586D1 /* AppDelegate.m */,
+				B84E0E0718DF0ADA005586D1 /* Main.storyboard */,
+				B84E0E0D18DF0ADA005586D1 /* Images.xcassets */,
+				B84E0E2E18DF0CE6005586D1 /* ViewController.h */,
+				B84E0E2F18DF0CE6005586D1 /* ViewController.m */,
+				B824A86C18DFFDCC00679203 /* TableViewCell.h */,
+				B824A86D18DFFDCC00679203 /* TableViewCell.m */,
+				B84E0E3118DF1C0D005586D1 /* TwitPicImage.h */,
+				B84E0E3218DF1C0D005586D1 /* TwitPicImage.m */,
+				B84E0DFC18DF0ADA005586D1 /* Supporting Files */,
+			);
+			path = YSImageRequestExample;
+			sourceTree = "<group>";
+		};
+		B84E0DFC18DF0ADA005586D1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B84E0DFD18DF0ADA005586D1 /* YSImageRequestExample-Info.plist */,
+				B84E0DFE18DF0ADA005586D1 /* InfoPlist.strings */,
+				B84E0E0118DF0ADA005586D1 /* main.m */,
+				B84E0E0318DF0ADA005586D1 /* YSImageRequestExample-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B84E0E1A18DF0ADA005586D1 /* YSImageRequestExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				B84E0E2018DF0ADA005586D1 /* YSImageRequestExampleTests.m */,
+				B84E0E1B18DF0ADA005586D1 /* Supporting Files */,
+			);
+			path = YSImageRequestExampleTests;
+			sourceTree = "<group>";
+		};
+		B84E0E1B18DF0ADA005586D1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B84E0E1C18DF0ADA005586D1 /* YSImageRequestExampleTests-Info.plist */,
+				B84E0E1D18DF0ADA005586D1 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B84E0E2A18DF0B25005586D1 /* YSImageRequest */ = {
+			isa = PBXGroup;
+			children = (
+				B84E0E2B18DF0C49005586D1 /* YSImageRequest.h */,
+				B84E0E2C18DF0C49005586D1 /* YSImageRequest.m */,
+			);
+			name = YSImageRequest;
+			path = ../../Classes/YSImageRequest;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B84E0DF118DF0ADA005586D1 /* YSImageRequestExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B84E0E2418DF0ADA005586D1 /* Build configuration list for PBXNativeTarget "YSImageRequestExample" */;
+			buildPhases = (
+				8F815CEF01AE4E2DB964B9A4 /* Check Pods Manifest.lock */,
+				B84E0DEE18DF0ADA005586D1 /* Sources */,
+				B84E0DEF18DF0ADA005586D1 /* Frameworks */,
+				B84E0DF018DF0ADA005586D1 /* Resources */,
+				3BC7C4C34AC44955A6B96CEE /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YSImageRequestExample;
+			productName = YSImageRequestExample;
+			productReference = B84E0DF218DF0ADA005586D1 /* YSImageRequestExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B84E0E1218DF0ADA005586D1 /* YSImageRequestExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B84E0E2718DF0ADA005586D1 /* Build configuration list for PBXNativeTarget "YSImageRequestExampleTests" */;
+			buildPhases = (
+				B84E0E0F18DF0ADA005586D1 /* Sources */,
+				B84E0E1018DF0ADA005586D1 /* Frameworks */,
+				B84E0E1118DF0ADA005586D1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B84E0E1918DF0ADA005586D1 /* PBXTargetDependency */,
+			);
+			name = YSImageRequestExampleTests;
+			productName = YSImageRequestExampleTests;
+			productReference = B84E0E1318DF0ADA005586D1 /* YSImageRequestExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B84E0DEA18DF0ADA005586D1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Yu Sugawara";
+				TargetAttributes = {
+					B84E0E1218DF0ADA005586D1 = {
+						TestTargetID = B84E0DF118DF0ADA005586D1;
+					};
+				};
+			};
+			buildConfigurationList = B84E0DED18DF0ADA005586D1 /* Build configuration list for PBXProject "YSImageRequestExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B84E0DE918DF0ADA005586D1;
+			productRefGroup = B84E0DF318DF0ADA005586D1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B84E0DF118DF0ADA005586D1 /* YSImageRequestExample */,
+				B84E0E1218DF0ADA005586D1 /* YSImageRequestExampleTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B84E0DF018DF0ADA005586D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B84E0E0E18DF0ADA005586D1 /* Images.xcassets in Resources */,
+				B84E0E0018DF0ADA005586D1 /* InfoPlist.strings in Resources */,
+				B84E0E0918DF0ADA005586D1 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B84E0E1118DF0ADA005586D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B84E0E1F18DF0ADA005586D1 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3BC7C4C34AC44955A6B96CEE /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8F815CEF01AE4E2DB964B9A4 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B84E0DEE18DF0ADA005586D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B84E0E0618DF0ADA005586D1 /* AppDelegate.m in Sources */,
+				B824A86E18DFFDCC00679203 /* TableViewCell.m in Sources */,
+				B84E0E0218DF0ADA005586D1 /* main.m in Sources */,
+				B84E0E3318DF1C0D005586D1 /* TwitPicImage.m in Sources */,
+				B84E0E3018DF0CE6005586D1 /* ViewController.m in Sources */,
+				B84E0E2D18DF0C49005586D1 /* YSImageRequest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B84E0E0F18DF0ADA005586D1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B84E0E2118DF0ADA005586D1 /* YSImageRequestExampleTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B84E0E1918DF0ADA005586D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B84E0DF118DF0ADA005586D1 /* YSImageRequestExample */;
+			targetProxy = B84E0E1818DF0ADA005586D1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B84E0DFE18DF0ADA005586D1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B84E0DFF18DF0ADA005586D1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		B84E0E0718DF0ADA005586D1 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B84E0E0818DF0ADA005586D1 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B84E0E1D18DF0ADA005586D1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B84E0E1E18DF0ADA005586D1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B84E0E2218DF0ADA005586D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		B84E0E2318DF0ADA005586D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B84E0E2518DF0ADA005586D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52E2611CF8C44C60ABE2F344 /* Pods.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "YSImageRequestExample/YSImageRequestExample-Prefix.pch";
+				INFOPLIST_FILE = "YSImageRequestExample/YSImageRequestExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		B84E0E2618DF0ADA005586D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52E2611CF8C44C60ABE2F344 /* Pods.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "YSImageRequestExample/YSImageRequestExample-Prefix.pch";
+				INFOPLIST_FILE = "YSImageRequestExample/YSImageRequestExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		B84E0E2818DF0ADA005586D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/YSImageRequestExample.app/YSImageRequestExample";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "YSImageRequestExample/YSImageRequestExample-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "YSImageRequestExampleTests/YSImageRequestExampleTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		B84E0E2918DF0ADA005586D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/YSImageRequestExample.app/YSImageRequestExample";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "YSImageRequestExample/YSImageRequestExample-Prefix.pch";
+				INFOPLIST_FILE = "YSImageRequestExampleTests/YSImageRequestExampleTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B84E0DED18DF0ADA005586D1 /* Build configuration list for PBXProject "YSImageRequestExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B84E0E2218DF0ADA005586D1 /* Debug */,
+				B84E0E2318DF0ADA005586D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B84E0E2418DF0ADA005586D1 /* Build configuration list for PBXNativeTarget "YSImageRequestExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B84E0E2518DF0ADA005586D1 /* Debug */,
+				B84E0E2618DF0ADA005586D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B84E0E2718DF0ADA005586D1 /* Build configuration list for PBXNativeTarget "YSImageRequestExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B84E0E2818DF0ADA005586D1 /* Debug */,
+				B84E0E2918DF0ADA005586D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B84E0DEA18DF0ADA005586D1 /* Project object */;
+}
