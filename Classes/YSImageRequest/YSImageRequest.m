@@ -64,6 +64,8 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 
 - (void)requestWithURL:(NSURL *)url completion:(YSImageRequestCompletion)completion
 {
+    [self cancel];
+    
     NSString *cacheKey = cacheKeyFromURL(url);
     TMCache *cache = [[self class] sharedCache];
     UIImage *cachedImg = [cache objectForKey:cacheKey];
