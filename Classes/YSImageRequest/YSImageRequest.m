@@ -104,7 +104,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 + (void)removeAllCache
 {
     LOG_YSIMAGE_REQUEST(@"%s", __func__);
-    [[TMCache sharedCache] removeAllObjects];
+    [[self sharedCache] removeAllObjects];
 }
 
 @end
