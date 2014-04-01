@@ -17,7 +17,7 @@
 #endif
 
 #if DEBUG
-    #if 1
+    #if 0
         #define LOG_YSIMAGE_REQUEST(...) NSLog(__VA_ARGS__)
     #endif
 #endif
@@ -26,7 +26,8 @@
     #define LOG_YSIMAGE_REQUEST(...)
 #endif
 
-static NSString * const kCacheName = @"YSImageRequest";
+static NSString * const kRequestImageCacheName = @"YSImageRequest";
+static NSString * const kFilterImageCacheName = @"YSImageRequest-Filter";
 
 static inline NSString *cacheKeyFromURL(NSURL *url)
 {
@@ -36,17 +37,28 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 @interface YSImageRequest ()
 
 @property (nonatomic) AFHTTPRequestOperation *imageRequestOperation;
+@property (nonatomic, getter = isCancelled) BOOL cancelled;
 
 @end
 
 @implementation YSImageRequest
 
-+ (TMCache*)sharedCache
++ (TMCache*)requestImageCache
 {
     static TMCache *s_cache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_cache = [[TMCache alloc] initWithName:kCacheName];
+        s_cache = [[TMCache alloc] initWithName:kRequestImageCacheName];
+    });
+    return s_cache;
+}
+
++ (TMCache*)filterImageCache
+{
+    static TMCache *s_cache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        s_cache = [[TMCache alloc] initWithName:kFilterImageCacheName];
     });
     return s_cache;
 }
@@ -62,12 +74,27 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     return s_operationQueue;
 }
 
++ (dispatch_queue_t)filterDispatchQueue
+{
+    static dispatch_queue_t s_queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        s_queue = dispatch_queue_create("jp.YuSugawara.YSImageRequest.filter.queue", NULL);
+    });
+    return s_queue;
+}
+
+- (void)dealloc
+{
+    LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
+}
+
 - (void)requestWithURL:(NSURL *)url completion:(YSImageRequestCompletion)completion
 {
     [self cancel];
     
     NSString *cacheKey = cacheKeyFromURL(url);
-    TMCache *cache = [[self class] sharedCache];
+    TMCache *cache = [[self class] requestImageCache];
     UIImage *cachedImg = [cache objectForKey:cacheKey];
     if (cachedImg) {
         LOG_YSIMAGE_REQUEST(@"[Success] Cached image, key: %@", cacheKey);
@@ -92,21 +119,69 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     self.imageRequestOperation = ope;
 }
 
+- (void)requestWithURL:(NSURL *)url
+                  size:(CGSize)size
+               quality:(CGInterpolationQuality)quality
+             trimToFit:(BOOL)trimToFit
+                  mask:(YSImageFilterMask)mask
+           borderWidth:(CGFloat)borderWidth
+           borderColor:(UIColor*)borderColor
+            completion:(YSImageRequestCompletion)completion
+{
+    [self cancel];
+    self.cancelled = NO;
+    
+    NSString *cacheKey = [NSString stringWithFormat:@"%@_%.0f-%.0f", cacheKeyFromURL(url), size.width, size.height];
+    TMCache *cache = [[self class] filterImageCache];
+    UIImage *cachedImg = [cache objectForKey:cacheKey];
+    if (cachedImg) {
+        LOG_YSIMAGE_REQUEST(@"[Success] Cached filtered image, key: %@", cacheKey);
+        if (completion) completion(cachedImg, nil);
+        return;
+    }
+    
+    __strong typeof(self) strongSelf = self;
+    [self requestWithURL:url completion:^(UIImage *image, NSError *error) {
+        if (error) {
+            if (completion) completion(nil, error);
+            return ;
+        }
+        dispatch_async([YSImageRequest filterDispatchQueue], ^{
+            [YSImageFilter resizeWithImage:image size:size quality:quality trimToFit:trimToFit mask:mask borderWidth:borderWidth borderColor:borderColor completion:^(UIImage *filterdImage)
+             {
+                 if (strongSelf.isCancelled) {
+                     LOG_YSIMAGE_REQUEST(@"cancel filter %p", strongSelf);
+                     return ;
+                 }
+                 LOG_YSIMAGE_REQUEST(@"size %@", NSStringFromCGSize(filterdImage.size));
+                 [cache setObject:filterdImage forKey:cacheKey];
+                 if (completion) completion(filterdImage, nil);
+             }];
+        });
+    }];
+}
+
 - (void)cancel
 {
-#if DEBUG
     if (self.imageRequestOperation) {
         LOG_YSIMAGE_REQUEST(@"[Cancel] image request url: %@", self.imageRequestOperation.request.URL.absoluteString);
+        self.cancelled = YES;
     }
-#endif
+    
     [self.imageRequestOperation cancel];
     self.imageRequestOperation = nil;
 }
 
-+ (void)removeAllCache
++ (void)removeAllRequestCache
 {
     LOG_YSIMAGE_REQUEST(@"%s", __func__);
-    [[self sharedCache] removeAllObjects];
+    [[self requestImageCache] removeAllObjects];
+}
+
++ (void)removeAllFilterCache
+{
+    LOG_YSIMAGE_REQUEST(@"%s", __func__);
+    [[self filterImageCache] removeAllObjects];
 }
 
 @end
