@@ -11,6 +11,8 @@
 
 #import <YSUIKitAdditions/UIImage+YSUIKitAdditions.h>
 
+static CGFloat const kImageSize = 50.f;
+
 @interface TableViewCell ()
 
 @property (nonatomic) YSImageRequest *imageRequest;
@@ -24,8 +26,7 @@
     static UIImage *s_image;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        CGFloat s = 60.f;
-        s_image = [UIImage ys_imageFromColor:[UIColor lightGrayColor] withSize:CGSizeMake(s, s)];
+        s_image = [UIImage ys_imageFromColor:[UIColor lightGrayColor] withSize:CGSizeMake(kImageSize, kImageSize)];
     });
     return s_image;
 }
@@ -61,20 +62,37 @@
     self.imageRequest = nil;
 }
 
-- (void)setImageWithURL:(NSURL*)url
+- (void)setImageWithURL:(NSURL*)url quality:(CGInterpolationQuality)quality
 {
     [self cancelImageRequest];
     
     self.imageView.image = [[self class] placeholderImage];
-    
+
     YSImageRequest *req = [[YSImageRequest alloc] init];
     __weak typeof(self) wself = self;
+#if 0
     [req requestWithURL:url completion:^(UIImage *image, NSError *error) {
         if (error) {
             return ;
         }
         wself.imageView.image = image;
     }];
+#else
+    [req requestWithURL:url
+                   size:CGSizeMake(kImageSize, kImageSize)
+                quality:quality
+              trimToFit:NO
+//                   mask:YSImageFilterMaskCircle
+                   mask:YSImageFilterMaskRoundedCorners
+            borderWidth:1.f
+            borderColor:[UIColor blackColor]
+             completion:^(UIImage *image, NSError *error) {
+                 if (error) {
+                     return ;
+                 }
+                 wself.imageView.image = image;
+             }];
+#endif
     self.imageRequest = req;
 }
 

@@ -50,7 +50,8 @@ static NSString * const kCellIdentifier = @"Cell";
 {
     [super viewDidLoad];
     
-    [YSImageRequest removeAllCache];
+    [YSImageRequest removeAllRequestCache];
+    [YSImageRequest removeAllFilterCache];
     
     self.twitPicImages = @[].mutableCopy;    
     
@@ -71,38 +72,50 @@ static NSString * const kCellIdentifier = @"Cell";
 - (void)requestWithTags:(NSArray*)tags completion:(void(^)(void))completion
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        __block NSUInteger requestNum = [tags count];
-        NSLog(@"[Start request] requestNum: %@", @(requestNum));
+        NSLog(@"[Start request] requestNum: %@", @([tags count]));
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
         for (NSString *tag in tags) {
+            __weak typeof(self) wself = self;
+            
+            void(^setTwitPicImages)(NSString* tag, NSDictionary *json) = ^(NSString *tag, NSDictionary *json){
+                // NSLog(@"Success: json: %@", json);
+                for (NSDictionary *imageDict in [json objectForKey:@"images"]) {
+                    TwitPicImage *img = [[TwitPicImage alloc] initWithDictonary:imageDict];
+                    img.tag = tag;
+                    [wself.twitPicImages addObject:img];
+                }
+            };
+            
+            NSData *jsonData = [ud objectForKey:tag];
+            if (jsonData) {
+                NSDictionary *json = [NSKeyedUnarchiver unarchiveObjectWithData:jsonData];
+                NSLog(@"cached json, tag: %@", tag);
+                setTwitPicImages(tag, json);
+                continue;
+            }
+            
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
             NSString *urlStr = [NSString stringWithFormat:@"http://api.twitpic.com/2/tags/show.json?tag=%@", tag];
             NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
-            __weak typeof(self) wself = self;
             AFHTTPRequestOperation *operation = [[AFHTTPRequestOperationManager manager] HTTPRequestOperationWithRequest:req success:^(AFHTTPRequestOperation *operation, id json)
                                                  {
-//                                                     NSLog(@"Success: json: %@", json);
-                                                     for (NSDictionary *imageDict in [json objectForKey:@"images"]) {
-                                                         TwitPicImage *img = [[TwitPicImage alloc] initWithDictonary:imageDict];
-                                                         img.tag = tag;
-                                                         [wself.twitPicImages addObject:img];
-                                                     }
-                                                     NSLog(@"Success %@", @(requestNum));
-                                                     requestNum--;
+                                                     NSLog(@"Success");
+                                                     setTwitPicImages(tag, json);
+                                                     [ud setObject:[NSKeyedArchiver archivedDataWithRootObject:json] forKey:tag];
+                                                     dispatch_semaphore_signal(semaphore);
                                                  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                                      NSLog(@"Failure: operation: %@, error: %@", operation, error);
-                                                     requestNum--;
+                                                     dispatch_semaphore_signal(semaphore);
                                                  }];
-
+            
             [[[self class] imageJsonsOperationQueue] addOperation:operation];
             self.requestOperation = operation;
+            
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            while (requestNum != 0) {
-                NSLog(@"Wait...");
-                [NSThread sleepForTimeInterval:1.];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion();
-            });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion();
         });
     });
 }
@@ -126,23 +139,31 @@ static NSString * const kCellIdentifier = @"Cell";
     
     TwitPicImage *twitPicImage = [self.twitPicImages objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", @(indexPath.row)];
-    cell.detailTextLabel.text = twitPicImage.tag;
-    
     NSString *urlStr = [NSString stringWithFormat:@"http://twitpic.com/show/thumb/%@", twitPicImage.short_id];
     
-    [cell setImageWithURL:[NSURL URLWithString:urlStr]];
+    CGInterpolationQuality quality = (indexPath.row%4) + 1;
+    [cell setImageWithURL:[NSURL URLWithString:urlStr] quality:quality];
     
-//    [cell.imageView setImageWithURL:[NSURL URLWithString:urlStr]
-//                   placeholderImage:];
+    NSString *qualityStr;
+    switch (quality) {
+        case kCGInterpolationNone:
+            qualityStr = @"None";
+            break;
+        case kCGInterpolationLow:
+            qualityStr = @"Low";
+            break;
+        case kCGInterpolationMedium:
+            qualityStr = @"Medium";
+            break;
+        case kCGInterpolationHigh:
+            qualityStr = @"High";
+            break;
+        default:
+            break;
+    }
     
-//    [cell.imageView setImageWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]
-//                          placeholderImage:nil
-//                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-//                                       NSLog(@"image %@", NSStringFromCGSize(image.size));
-//                                   } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-//                                       NSLog(@"failure %@", response);
-//                                   }];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", @(indexPath.row), qualityStr];
+    cell.detailTextLabel.text = twitPicImage.tag;
     
     return cell;
 }

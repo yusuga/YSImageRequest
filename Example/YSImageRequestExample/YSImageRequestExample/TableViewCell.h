@@ -10,6 +10,6 @@
 
 @interface TableViewCell : UITableViewCell
 
-- (void)setImageWithURL:(NSURL*)url;
+- (void)setImageWithURL:(NSURL*)url quality:(CGInterpolationQuality)quality;
 
 @end

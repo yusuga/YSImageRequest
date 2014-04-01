@@ -20,18 +20,21 @@ PODS:
     - AFNetworking/NSURLSession
   - MD5Digest (0.1.0)
   - TMCache (1.2.0)
+  - YSImageFilter (0.0.5)
   - YSUIKitAdditions (0.0.8)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
   - MD5Digest
   - TMCache
+  - YSImageFilter
   - YSUIKitAdditions
 
 SPEC CHECKSUMS:
   AFNetworking: 0121f4b69be3fa58d1ab317866e036e12ac9651d
   MD5Digest: 355c8733ab522cc516a4047e2d93e2b842947b18
   TMCache: 4b05e1b124d9f7e8d449640e059cff4cda17ed27
+  YSImageFilter: 1173fda04f4d166c752114a309f140cf0b62f732
   YSUIKitAdditions: 1d15576e0c7d90bc74444132fd75e8944184f2b6
 
 COCOAPODS: 0.29.0
