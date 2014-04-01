@@ -10,6 +10,7 @@
 
 #import <AFNetworking/AFNetworking.h>
 #import <TMCache/TMCache.h>
+#import <MD5Digest/NSString+MD5.h>
 
 #if DEBUG
     #define DEBUG_CACHE_DISABLE 1
@@ -29,7 +30,7 @@ static NSString * const kCacheName = @"YSImageRequest";
 
 static inline NSString *cacheKeyFromURL(NSURL *url)
 {
-    return url.absoluteString;
+    return url.absoluteString.MD5Digest;
 }
 
 @interface YSImageRequest ()
