@@ -66,7 +66,7 @@ static CGFloat const kImageSize = 50.f;
 {
     [self cancelImageRequest];
     
-    self.imageView.image = [[self class] placeholderImage];
+//    self.imageView.image = [[self class] placeholderImage];
 
     YSImageRequest *req = [[YSImageRequest alloc] init];
     __weak typeof(self) wself = self;
@@ -86,6 +86,9 @@ static CGFloat const kImageSize = 50.f;
                    mask:YSImageFilterMaskRoundedCorners
             borderWidth:1.f
             borderColor:[UIColor blackColor]
+       willRequestImage:^{
+           wself.imageView.image = [[wself class] placeholderImage];
+       }
              completion:^(UIImage *image, NSError *error) {
                  if (error) {
                      return ;
