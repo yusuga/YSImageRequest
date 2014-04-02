@@ -126,6 +126,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
                   mask:(YSImageFilterMask)mask
            borderWidth:(CGFloat)borderWidth
            borderColor:(UIColor*)borderColor
+      willRequestImage:(void (^)(void))willRequestImage
             completion:(YSImageRequestCompletion)completion
 {
     [self cancel];
@@ -139,6 +140,8 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
         if (completion) completion(cachedImg, nil);
         return;
     }
+    
+    if (willRequestImage) willRequestImage();
     
     __strong typeof(self) strongSelf = self;
     [self requestWithURL:url completion:^(UIImage *image, NSError *error) {

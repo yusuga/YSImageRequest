@@ -23,6 +23,7 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
                   mask:(YSImageFilterMask)mask
            borderWidth:(CGFloat)borderWidth
            borderColor:(UIColor*)borderColor
+      willRequestImage:(void(^)(void))willRequestImage
             completion:(YSImageRequestCompletion)completion;
 
 - (void)cancel;
