@@ -39,22 +39,22 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 
 @implementation YSImageRequest
 
-+ (TMCache*)requestImageCache
++ (TMDiskCache*)requestImageDiskCache
 {
-    static TMCache *s_cache;
+    static TMDiskCache *s_cache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_cache = [[TMCache alloc] initWithName:kRequestImageCacheName];
+        s_cache = [[TMDiskCache alloc] initWithName:kRequestImageCacheName];
     });
     return s_cache;
 }
 
-+ (TMCache*)filterImageCache
++ (NSCache*)filterImageMemoryCache
 {
-    static TMCache *s_cache;
+    static NSCache *s_cache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_cache = [[TMCache alloc] initWithName:kFilterImageCacheName];
+        s_cache = [[NSCache alloc] init];
     });
     return s_cache;
 }
@@ -80,9 +80,27 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     return s_queue;
 }
 
+- (id)init
+{
+    if (self = [super init]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveMemoryWarningNotification:)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:[UIApplication sharedApplication]];
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)didReceiveMemoryWarningNotification:(NSNotification*)notification
+{
+    LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
+    [[[self class] filterImageMemoryCache] removeAllObjects];
 }
 
 - (void)requestWithURL:(NSURL *)url completion:(YSImageRequestCompletion)completion
@@ -93,8 +111,8 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     __weak typeof(self) wself = self;
     __strong typeof(self) strongSelf = self;
     NSString *cacheKey = cacheKeyFromURL(url);
-    TMCache *cache = [[self class] requestImageCache];
-    [cache objectForKey:cacheKey block:^(TMCache *cache, NSString *key, UIImage *cachedImage) {
+    TMDiskCache *cache = [[self class] requestImageDiskCache];
+    [cache objectForKey:cacheKey block:^(TMDiskCache *cache, NSString *key, UIImage<NSCoding> *cachedImage, NSURL *fileURL) {
         if (strongSelf.isCancelled) {
             LOG_YSIMAGE_REQUEST(@"cancel: before request %p", strongSelf);
             return ;
@@ -111,7 +129,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
         AFHTTPRequestOperation *ope = [[AFHTTPRequestOperationManager manager] HTTPRequestOperationWithRequest:req success:^(AFHTTPRequestOperation *operation, UIImage *responseImage)
                                        {
                                            if (strongSelf.isCancelled) {
-                                               LOG_YSIMAGE_REQUEST(@"cancel: requested %p", strongSelf);
+                                               LOG_YSIMAGE_REQUEST(@"cancel: success request %p", strongSelf);
                                                return ;
                                            }
                                            LOG_YSIMAGE_REQUEST(@"[Success] request url: %@", req.URL.absoluteString);
@@ -119,6 +137,10 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
                                            [cache setObject:responseImage forKey:cacheKey block:nil];
                                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                            LOG_YSIMAGE_REQUEST(@"[Failure] operation: %@, error: %@", operation, error);
+                                           if (strongSelf.isCancelled) {
+                                               LOG_YSIMAGE_REQUEST(@"cancel: failure request %p", strongSelf);
+                                               return ;
+                                           }
                                            if (completion) completion(nil, error);
                                        }];
         ope.responseSerializer = [AFImageResponseSerializer serializer];
@@ -141,42 +163,35 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     [self cancel];
     self.cancelled = NO;
     
+    NSString *cacheKey = [NSString stringWithFormat:@"%@_%.0f-%.0f", cacheKeyFromURL(url), size.width, size.height];
+    NSCache *cache = [[self class] filterImageMemoryCache];
+    UIImage *cachedImage = [cache objectForKey:cacheKey];
+    if (cachedImage) {
+        LOG_YSIMAGE_REQUEST(@"[Success] Cached filtered image, key: %@", cacheKey);
+        if (completion) completion(cachedImage, nil);
+        return;
+    }
+    
     if (willRequestImage) willRequestImage();
     
-    __weak typeof(self) wself = self;
     __strong typeof(self) strongSelf = self;
-    NSString *cacheKey = [NSString stringWithFormat:@"%@_%.0f-%.0f", cacheKeyFromURL(url), size.width, size.height];
-    TMCache *cache = [[self class] filterImageCache];
-    [cache objectForKey:cacheKey block:^(TMCache *cache, NSString *key, UIImage *cacheImage) {
-        if (strongSelf.isCancelled) {
-            LOG_YSIMAGE_REQUEST(@"cancel: before filter %p", strongSelf);
+    [self requestWithURL:url completion:^(UIImage *image, NSError *error) {
+        if (error) {
+            if (completion) completion(nil, error);
             return ;
         }
-        if (cacheImage) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                LOG_YSIMAGE_REQUEST(@"[Success] Cached filtered image, key: %@", cacheKey);
-                if (completion) completion(cacheImage, nil);
-            });
-            return;
-        }        
-        [wself requestWithURL:url completion:^(UIImage *image, NSError *error) {
-            if (error) {
-                if (completion) completion(nil, error);
-                return ;
-            }
-            dispatch_async([YSImageRequest filterDispatchQueue], ^{
-                [YSImageFilter resizeWithImage:image size:size quality:quality trimToFit:trimToFit mask:mask borderWidth:borderWidth borderColor:borderColor completion:^(UIImage *filterdImage)
-                 {
-                     if (strongSelf.isCancelled) {
-                         LOG_YSIMAGE_REQUEST(@"cancel: filtered %p", strongSelf);
-                         return ;
-                     }
-                     LOG_YSIMAGE_REQUEST(@"size %@", NSStringFromCGSize(filterdImage.size));
-                     if (completion) completion(filterdImage, nil);
-                     [cache setObject:filterdImage forKey:cacheKey block:nil];
-                 }];
-            });
-        }];
+        dispatch_async([YSImageRequest filterDispatchQueue], ^{
+            [YSImageFilter resizeWithImage:image size:size quality:quality trimToFit:trimToFit mask:mask borderWidth:borderWidth borderColor:borderColor completion:^(UIImage *filterdImage)
+             {
+                 if (strongSelf.isCancelled) {
+                     LOG_YSIMAGE_REQUEST(@"cancel: filtered %p", strongSelf);
+                     return ;
+                 }
+                 LOG_YSIMAGE_REQUEST(@"size %@", NSStringFromCGSize(filterdImage.size));
+                 if (completion) completion(filterdImage, nil);
+                 [cache setObject:filterdImage forKey:cacheKey];
+             }];
+        });
     }];
 }
 
@@ -191,7 +206,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 + (void)removeAllRequestCacheWithCompletion:(void(^)(void))completion
 {
     LOG_YSIMAGE_REQUEST(@"%s", __func__);
-    [[self requestImageCache] removeAllObjects:^(TMCache *cache) {
+    [[self requestImageDiskCache] removeAllObjects:^(TMDiskCache *cache) {
         if (completion) completion();
     }];
 }
@@ -199,9 +214,8 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 + (void)removeAllFilterCacheWithCompletion:(void(^)(void))completion
 {
     LOG_YSIMAGE_REQUEST(@"%s", __func__);
-    [[self filterImageCache] removeAllObjects:^(TMCache *cache) {
-        if (completion) completion();
-    }];
+    [[self filterImageMemoryCache] removeAllObjects];
+    if (completion) completion();
 }
 
 @end
