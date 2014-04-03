@@ -28,7 +28,7 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
 
 - (void)cancel;
 
-+ (void)removeAllRequestCache;
-+ (void)removeAllFilterCache;
++ (void)removeAllRequestCacheWithCompletion:(void(^)(void))completion;
++ (void)removeAllFilterCacheWithCompletion:(void(^)(void))completion;
 
 @end
