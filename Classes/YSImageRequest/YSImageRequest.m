@@ -55,6 +55,10 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         s_cache = [[NSCache alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(didReceiveMemoryWarningNotification:)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification
+                                                   object:[UIApplication sharedApplication]];
     });
     return s_cache;
 }
@@ -80,27 +84,15 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     return s_queue;
 }
 
-- (id)init
-{
-    if (self = [super init]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(didReceiveMemoryWarningNotification:)
-                                                     name:UIApplicationDidReceiveMemoryWarningNotification
-                                                   object:[UIApplication sharedApplication]];
-    }
-    return self;
-}
-
 - (void)dealloc
 {
     LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)didReceiveMemoryWarningNotification:(NSNotification*)notification
++ (void)didReceiveMemoryWarningNotification:(NSNotification*)notification
 {
     LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
-    [[[self class] filterImageMemoryCache] removeAllObjects];
+    [[self filterImageMemoryCache] removeAllObjects];
 }
 
 - (void)requestWithURL:(NSURL *)url completion:(YSImageRequestCompletion)completion
