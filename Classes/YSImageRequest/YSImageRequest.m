@@ -181,7 +181,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
                  }
                  LOG_YSIMAGE_REQUEST(@"size %@", NSStringFromCGSize(filterdImage.size));
                  if (completion) completion(filterdImage, nil);
-                 [cache setObject:filterdImage forKey:cacheKey];
+                 if (filterdImage && cacheKey) [cache setObject:filterdImage forKey:cacheKey];
              }];
         });
     }];
