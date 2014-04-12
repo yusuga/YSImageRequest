@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <YSImageFilter/YSImageFilter.h>
+#import "FICImage.h"
 
 typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
 
@@ -25,6 +26,16 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
            borderColor:(UIColor*)borderColor
       willRequestImage:(void(^)(void))willRequestImage
             completion:(YSImageRequestCompletion)completion;
+
+- (void)requestWithFICImage:(FICImage *)imageEntitiy
+                       size:(CGSize)size
+                    quality:(CGInterpolationQuality)quality
+                  trimToFit:(BOOL)trimToFit
+                       mask:(YSImageFilterMask)mask
+                borderWidth:(CGFloat)borderWidth
+                borderColor:(UIColor*)borderColor
+           willRequestImage:(void (^)(void))willRequestImage
+                 completion:(YSImageRequestCompletion)completion;
 
 - (void)cancel;
 
