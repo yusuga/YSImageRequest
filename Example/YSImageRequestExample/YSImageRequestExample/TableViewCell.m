@@ -65,24 +65,34 @@ static CGFloat const kImageSize = 50.f;
 - (void)setImageWithURL:(NSURL*)url quality:(CGInterpolationQuality)quality
 {
     [self cancelImageRequest];
-    
-//    self.imageView.image = [[self class] placeholderImage];
 
     YSImageRequest *req = [[YSImageRequest alloc] init];
     __weak typeof(self) wself = self;
 #if 0
-    [req requestWithURL:url completion:^(UIImage *image, NSError *error) {
-        if (error) {
-            return ;
-        }
-        wself.imageView.image = image;
-    }];
-#else
     [req requestWithURL:url
                    size:CGSizeMake(kImageSize, kImageSize)
                 quality:quality
               trimToFit:NO
 //                   mask:YSImageFilterMaskCircle
+//                   mask:YSImageFilterMaskRoundedCorners
+                   mask:YSImageFilterMaskNone
+            borderWidth:0.f
+            borderColor:nil
+       willRequestImage:^{
+           wself.imageView.image = [[wself class] placeholderImage];
+       }
+             completion:^(UIImage *image, NSError *error) {
+                 if (error) {
+                     return ;
+                 }
+                 wself.imageView.image = image;
+             }];
+#else
+    [req requestWithFICImage:[[FICImage alloc] initWithSourceImageURL:url]
+                   size:CGSizeMake(kImageSize, kImageSize)
+                quality:quality
+              trimToFit:NO
+     //                   mask:YSImageFilterMaskCircle
                    mask:YSImageFilterMaskRoundedCorners
             borderWidth:1.f
             borderColor:[UIColor blackColor]

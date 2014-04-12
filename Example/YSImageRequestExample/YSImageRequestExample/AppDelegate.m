@@ -7,12 +7,17 @@
 //
 
 #import "AppDelegate.h"
+#import <FastImageCache/FICImageCache.h>
+#import "FICImage.h"
+
+@interface AppDelegate () //<FICImageCacheDelegate>
+
+@end
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // Override point for customization after application launch.
+{      
     return YES;
 }
 							
@@ -42,5 +47,29 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+#pragma mark - Protocol Implementations
+
+//#pragma mark - FICImageCacheDelegate
+//
+//- (void)imageCache:(FICImageCache *)imageCache wantsSourceImageForEntity:(id<FICEntity>)entity withFormatName:(NSString *)formatName completionBlock:(FICImageRequestCompletionBlock)completionBlock
+//{
+//    // Images typically come from the Internet rather than from the app bundle directly, so this would be the place to fire off a network request to download the image.
+//    // For the purposes of this demo app, we'll just access images stored locally on disk.
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        UIImage *sourceImage = [(FICImage *)entity sourceImage];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            completionBlock(sourceImage);
+//        });
+//    });
+//}
+//
+//- (BOOL)imageCache:(FICImageCache *)imageCache shouldProcessAllFormatsInFamily:(NSString *)formatFamily forEntity:(id<FICEntity>)entity {
+//    return NO;
+//}
+//
+//- (void)imageCache:(FICImageCache *)imageCache errorDidOccurWithMessage:(NSString *)errorMessage {
+//    NSLog(@"%@", errorMessage);
+//}
 
 @end

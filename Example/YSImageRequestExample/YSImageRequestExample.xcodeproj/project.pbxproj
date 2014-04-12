@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		26C94B31981E41A4AC76DB67 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87AE41D9194C4E51B137799E /* libPods.a */; };
 		B824A86E18DFFDCC00679203 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B824A86D18DFFDCC00679203 /* TableViewCell.m */; };
+		B83C590218F8363800F6E87D /* FICImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B83C590118F8363800F6E87D /* FICImage.m */; };
 		B84E0DF618DF0ADA005586D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0DF518DF0ADA005586D1 /* Foundation.framework */; };
 		B84E0DF818DF0ADA005586D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0DF718DF0ADA005586D1 /* CoreGraphics.framework */; };
 		B84E0DFA18DF0ADA005586D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84E0DF918DF0ADA005586D1 /* UIKit.framework */; };
@@ -42,6 +43,8 @@
 		87AE41D9194C4E51B137799E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B824A86C18DFFDCC00679203 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
 		B824A86D18DFFDCC00679203 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
+		B83C590018F8363800F6E87D /* FICImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FICImage.h; sourceTree = "<group>"; };
+		B83C590118F8363800F6E87D /* FICImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FICImage.m; sourceTree = "<group>"; };
 		B84E0DF218DF0ADA005586D1 /* YSImageRequestExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YSImageRequestExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B84E0DF518DF0ADA005586D1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B84E0DF718DF0ADA005586D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -177,6 +180,8 @@
 			children = (
 				B84E0E2B18DF0C49005586D1 /* YSImageRequest.h */,
 				B84E0E2C18DF0C49005586D1 /* YSImageRequest.m */,
+				B83C590018F8363800F6E87D /* FICImage.h */,
+				B83C590118F8363800F6E87D /* FICImage.m */,
 			);
 			name = YSImageRequest;
 			path = ../../Classes/YSImageRequest;
@@ -315,6 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B84E0E0618DF0ADA005586D1 /* AppDelegate.m in Sources */,
+				B83C590218F8363800F6E87D /* FICImage.m in Sources */,
 				B824A86E18DFFDCC00679203 /* TableViewCell.m in Sources */,
 				B84E0E0218DF0ADA005586D1 /* main.m in Sources */,
 				B84E0E3318DF1C0D005586D1 /* TwitPicImage.m in Sources */,

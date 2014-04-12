@@ -3,5 +3,6 @@ pod 'AFNetworking', '~> 2.0'
 pod 'TMCache'
 pod 'MD5Digest'
 pod 'YSImageFilter'
+pod 'FastImageCache'
 
 pod 'YSUIKitAdditions'
