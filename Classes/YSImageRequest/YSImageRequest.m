@@ -90,7 +90,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     return s_queue;
 }
 
-+ (void)initialize
++ (void)setupFICImageFormats
 {
     FICImageFormat *smallUserThumbnailImageFormat = [[FICImageFormat alloc] init];
     smallUserThumbnailImageFormat.name = YSImageFormatNameUserThumbnailSmall;

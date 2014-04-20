@@ -27,6 +27,7 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
       willRequestImage:(void(^)(void))willRequestImage
             completion:(YSImageRequestCompletion)completion;
 
++ (void)setupFICImageFormats;
 - (void)requestWithFICImage:(FICImage *)imageEntitiy
                        size:(CGSize)size
                     quality:(CGInterpolationQuality)quality
