@@ -35,12 +35,12 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     return url.absoluteString.MD5Digest;
 }
 
-static inline NSString *memoryCacheKeyFromURL(NSURL *url, CGSize size, YSImageFilterMask mask, CGFloat maskCornerRadius)
+static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize size, YSImageFilterMask mask, CGFloat maskCornerRadius)
 {
     if (mask == YSImageFilterMaskRoundedCorners) {
-        return [NSString stringWithFormat:@"%@_%.0f-%.0f_%f", cacheKeyFromURL(url), size.width, size.height, maskCornerRadius];
+        return [NSString stringWithFormat:@"%@_%@_%.0f-%.0f_%f", cacheKeyFromURL(url), @(trimToFit), size.width, size.height, maskCornerRadius];
     } else {
-        return [NSString stringWithFormat:@"%@_%.0f-%.0f", cacheKeyFromURL(url), size.width, size.height];
+        return [NSString stringWithFormat:@"%@_%@_%.0f-%.0f", cacheKeyFromURL(url), @(trimToFit), size.width, size.height];
     }
 }
 
@@ -189,7 +189,8 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, CGSize size, YSImageFi
     [self cancel];
     self.cancelled = NO;
     
-    NSString *cacheKey = memoryCacheKeyFromURL(url, size, mask, maskCornerRadius);
+    NSString *cacheKey = memoryCacheKeyFromURL(url, trimToFit, size, mask, maskCornerRadius);
+    NSLog(@"key %@", cacheKey);
     NSCache *cache = [[self class] filterImageMemoryCache];
     UIImage *cachedImage = [cache objectForKey:cacheKey];
     if (cachedImage) {
