@@ -86,6 +86,7 @@ static CGFloat const kImageSize = 50.f;
                         mask:YSImageFilterMaskRoundedCorners
                  borderWidth:1.f
                  borderColor:[UIColor blackColor]
+            maskCornerRadius:0.f
             willRequestImage:^{
                 wself.imageView.image = [[wself class] placeholderImage];
             }
@@ -105,6 +106,7 @@ static CGFloat const kImageSize = 50.f;
                    mask:YSImageFilterMaskNone
             borderWidth:0.f
             borderColor:nil
+       maskCornerRadius:0.f
        willRequestImage:^{
            wself.imageView.image = [[wself class] placeholderImage];
        }
