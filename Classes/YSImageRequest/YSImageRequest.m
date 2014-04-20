@@ -190,7 +190,6 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     self.cancelled = NO;
     
     NSString *cacheKey = memoryCacheKeyFromURL(url, trimToFit, size, mask, maskCornerRadius);
-    NSLog(@"key %@", cacheKey);
     NSCache *cache = [[self class] filterImageMemoryCache];
     UIImage *cachedImage = [cache objectForKey:cacheKey];
     if (cachedImage) {
@@ -296,6 +295,8 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     [self cancel];
     self.cancelled = NO;
     self.imageEntity = imageEntitiy;
+    
+    NSLog(@"[FICImage] size, quality, trimToFit, mask, borderWidth, boorderColor, maskCornerRadius does not yet work");
     
     __weak typeof(self) wself = self;
     __strong typeof(self) strongSelf = self;
