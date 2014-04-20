@@ -24,6 +24,7 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
                   mask:(YSImageFilterMask)mask
            borderWidth:(CGFloat)borderWidth
            borderColor:(UIColor*)borderColor
+      maskCornerRadius:(CGFloat)maskCornerRadius
       willRequestImage:(void(^)(void))willRequestImage
             completion:(YSImageRequestCompletion)completion;
 
@@ -35,6 +36,7 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
                        mask:(YSImageFilterMask)mask
                 borderWidth:(CGFloat)borderWidth
                 borderColor:(UIColor*)borderColor
+           maskCornerRadius:(CGFloat)maskCornerRadius
            willRequestImage:(void (^)(void))willRequestImage
                  completion:(YSImageRequestCompletion)completion;
 

@@ -35,6 +35,15 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
     return url.absoluteString.MD5Digest;
 }
 
+static inline NSString *memoryCacheKeyFromURL(NSURL *url, CGSize size, YSImageFilterMask mask, CGFloat maskCornerRadius)
+{
+    if (mask == YSImageFilterMaskRoundedCorners) {
+        return [NSString stringWithFormat:@"%@_%.0f-%.0f_%f", cacheKeyFromURL(url), size.width, size.height, maskCornerRadius];
+    } else {
+        return [NSString stringWithFormat:@"%@_%.0f-%.0f", cacheKeyFromURL(url), size.width, size.height];
+    }
+}
+
 @interface YSImageRequest ()
 
 @property (nonatomic) AFHTTPRequestOperation *imageRequestOperation;
@@ -173,13 +182,14 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
                   mask:(YSImageFilterMask)mask
            borderWidth:(CGFloat)borderWidth
            borderColor:(UIColor*)borderColor
+      maskCornerRadius:(CGFloat)maskCornerRadius
       willRequestImage:(void (^)(void))willRequestImage
             completion:(YSImageRequestCompletion)completion
 {
     [self cancel];
     self.cancelled = NO;
     
-    NSString *cacheKey = [NSString stringWithFormat:@"%@_%.0f-%.0f", cacheKeyFromURL(url), size.width, size.height];
+    NSString *cacheKey = memoryCacheKeyFromURL(url, size, mask, maskCornerRadius);
     NSCache *cache = [[self class] filterImageMemoryCache];
     UIImage *cachedImage = [cache objectForKey:cacheKey];
     if (cachedImage) {
@@ -197,7 +207,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
             return ;
         }
         dispatch_async([YSImageRequest filterDispatchQueue], ^{
-            [YSImageFilter resizeWithImage:image size:size quality:quality trimToFit:trimToFit mask:mask borderWidth:borderWidth borderColor:borderColor completion:^(UIImage *filterdImage)
+            [YSImageFilter resizeWithImage:image size:size quality:quality trimToFit:trimToFit mask:mask borderWidth:borderWidth borderColor:borderColor maskCornerRadius:maskCornerRadius completion:^(UIImage *filterdImage)
              {
                  if (strongSelf.isCancelled) {
                      LOG_YSIMAGE_REQUEST(@"cancel: filtered %p", strongSelf);
@@ -278,6 +288,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
                        mask:(YSImageFilterMask)mask
                 borderWidth:(CGFloat)borderWidth
                 borderColor:(UIColor*)borderColor
+           maskCornerRadius:(CGFloat)maskCornerRadius
            willRequestImage:(void (^)(void))willRequestImage
                  completion:(YSImageRequestCompletion)completion
 {
@@ -306,7 +317,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
                      if (completion) completion(nil, error);
                      return ;
                  }
-                 [wself requestWithFICImage:imageEntitiy size:size quality:quality trimToFit:trimToFit mask:mask borderWidth:borderWidth borderColor:borderColor willRequestImage:willRequestImage completion:completion];
+                 [wself requestWithFICImage:imageEntitiy size:size quality:quality trimToFit:trimToFit mask:mask borderWidth:borderWidth borderColor:borderColor maskCornerRadius:maskCornerRadius willRequestImage:willRequestImage completion:completion];
              }];
          }
 }
