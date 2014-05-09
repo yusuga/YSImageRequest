@@ -14,35 +14,32 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
 
 @interface YSImageRequest : NSObject
 
+@property (nonatomic) CGInterpolationQuality quality; // Defualt: kCGInterpolationHigh
+@property (nonatomic) BOOL trimToFit;                 // Defualt: NO
+@property (nonatomic) YSImageFilterMask mask;         // Defualt: YSImageFilterMaskNone
+@property (nonatomic) CGFloat borderWidth;            // Defualt: 0.f;
+@property (nonatomic) UIColor *borderColor;           // Defualt: nil
+@property (nonatomic) CGFloat maskCornerRadius;       // Defualt: 0.f
+
 - (void)requestWithURL:(NSURL *)url
             completion:(YSImageRequestCompletion)completion;
 
 - (void)requestWithURL:(NSURL *)url
                   size:(CGSize)size
-               quality:(CGInterpolationQuality)quality
-             trimToFit:(BOOL)trimToFit
-                  mask:(YSImageFilterMask)mask
-           borderWidth:(CGFloat)borderWidth
-           borderColor:(UIColor*)borderColor
-      maskCornerRadius:(CGFloat)maskCornerRadius
-      willRequestImage:(void(^)(void))willRequestImage
+      willRequestImage:(void (^)(void))willRequestImage
             completion:(YSImageRequestCompletion)completion;
-
-+ (void)setupFICImageFormats;
-- (void)requestWithFICImage:(FICImage *)imageEntitiy
-                       size:(CGSize)size
-                    quality:(CGInterpolationQuality)quality
-                  trimToFit:(BOOL)trimToFit
-                       mask:(YSImageFilterMask)mask
-                borderWidth:(CGFloat)borderWidth
-                borderColor:(UIColor*)borderColor
-           maskCornerRadius:(CGFloat)maskCornerRadius
-           willRequestImage:(void (^)(void))willRequestImage
-                 completion:(YSImageRequestCompletion)completion;
 
 - (void)cancel;
 
 + (void)removeAllRequestCacheWithCompletion:(void(^)(void))completion;
 + (void)removeAllFilterCacheWithCompletion:(void(^)(void))completion;
+
+#pragma mark - FICImage request(β)
+// FICImage: size, quality, trimToFit, mask, borderWidth, boorderColor, maskCornerRadius does not yet work.
++ (void)setupFICImageFormats;
+- (void)requestWithFICImage:(FICImage *)imageEntitiy
+                       size:(CGSize)size
+           willRequestImage:(void (^)(void))willRequestImage
+                 completion:(YSImageRequestCompletion)completion;
 
 @end
