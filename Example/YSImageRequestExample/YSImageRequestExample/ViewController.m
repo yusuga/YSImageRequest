@@ -50,8 +50,8 @@ static NSString * const kCellIdentifier = @"Cell";
 {
     [super viewDidLoad];
     
-//    [YSImageRequest removeAllRequestCacheWithCompletion:nil];
-//    [YSImageRequest removeAllFilterCacheWithCompletion:nil];
+    [YSImageRequest removeAllRequestCacheWithCompletion:nil];
+    [YSImageRequest removeAllFilterCacheWithCompletion:nil];
     
     self.twitPicImages = @[].mutableCopy;    
     

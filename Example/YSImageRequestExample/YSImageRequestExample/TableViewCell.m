@@ -76,17 +76,17 @@ static CGFloat const kImageSize = 50.f;
     [self cancelImageRequest];
 
     YSImageRequest *req = [[YSImageRequest alloc] init];
+    req.quality = quality;
+    req.trimToFit = NO;
+    req.mask = YSImageFilterMaskNone;
+    req.borderWidth = 5.f;
+    req.borderColor = [UIColor redColor];
+    req.maskCornerRadius = 0.f;
+    
     __weak typeof(self) wself = self;
 #if kUseFICImage
     [req requestWithFICImage:[[FICImage alloc] initWithSourceImageURL:url]
                         size:CGSizeMake(kImageSize, kImageSize)
-                     quality:quality
-                   trimToFit:NO
-     //                   mask:YSImageFilterMaskCircle
-                        mask:YSImageFilterMaskRoundedCorners
-                 borderWidth:1.f
-                 borderColor:[UIColor blackColor]
-            maskCornerRadius:0.f
             willRequestImage:^{
                 wself.imageView.image = [[wself class] placeholderImage];
             }
@@ -99,14 +99,6 @@ static CGFloat const kImageSize = 50.f;
 #else
     [req requestWithURL:url
                    size:CGSizeMake(kImageSize, kImageSize)
-                quality:quality
-              trimToFit:NO
-     //                   mask:YSImageFilterMaskCircle
-     //                   mask:YSImageFilterMaskRoundedCorners
-                   mask:YSImageFilterMaskNone
-            borderWidth:0.f
-            borderColor:nil
-       maskCornerRadius:0.f
        willRequestImage:^{
            wself.imageView.image = [[wself class] placeholderImage];
        }
