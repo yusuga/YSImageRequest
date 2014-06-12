@@ -71,17 +71,19 @@ static CGFloat const kImageSize = 50.f;
     self.imageRequest = nil;
 }
 
-- (void)setImageWithURL:(NSURL*)url quality:(CGInterpolationQuality)quality
+- (void)setImageWithURL:(NSURL*)url quality:(CGInterpolationQuality)quality diskCacheName:(NSString *)diskCacheName
 {
     [self cancelImageRequest];
 
     YSImageRequest *req = [[YSImageRequest alloc] init];
     req.quality = quality;
     req.trimToFit = NO;
-    req.mask = YSImageFilterMaskNone;
+    req.mask = YSImageFilterMaskRoundedCorners;
     req.borderWidth = 5.f;
     req.borderColor = [UIColor redColor];
     req.maskCornerRadius = 0.f;
+    
+    req.diskCacheName = diskCacheName;
     
     __weak typeof(self) wself = self;
 #if kUseFICImage
@@ -97,7 +99,7 @@ static CGFloat const kImageSize = 50.f;
                       wself.imageView.image = image;
                   }];
 #else
-    [req requestWithURL:url
+    [req requestFilteredImageWithURL:url
                    size:CGSizeMake(kImageSize, kImageSize)
        willRequestImage:^{
            wself.imageView.image = [[wself class] placeholderImage];

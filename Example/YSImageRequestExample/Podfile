@@ -4,5 +4,6 @@ pod 'TMCache'
 pod 'MD5Digest'
 pod 'YSImageFilter'
 pod 'FastImageCache'
+pod 'YSFileManager'
 
 pod 'YSUIKitAdditions'

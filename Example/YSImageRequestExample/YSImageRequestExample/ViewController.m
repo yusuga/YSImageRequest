@@ -48,10 +48,7 @@ static NSString * const kCellIdentifier = @"Cell";
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    
-    [YSImageRequest removeAllRequestCacheWithCompletion:nil];
-    [YSImageRequest removeAllFilterCacheWithCompletion:nil];
+    [super viewDidLoad];    
     
     self.twitPicImages = @[].mutableCopy;    
     
@@ -142,30 +139,54 @@ static NSString * const kCellIdentifier = @"Cell";
     NSString *urlStr = [NSString stringWithFormat:@"http://twitpic.com/show/thumb/%@", twitPicImage.short_id];
     
     CGInterpolationQuality quality = (indexPath.row%4) + 1;
-    [cell setImageWithURL:[NSURL URLWithString:urlStr] quality:quality];
+    NSString *diskCacheNmae = [self stringFromQuality:quality];
+    [cell setImageWithURL:[NSURL URLWithString:urlStr] quality:quality diskCacheName:diskCacheNmae];
     
-    NSString *qualityStr;
-    switch (quality) {
-        case kCGInterpolationNone:
-            qualityStr = @"None";
-            break;
-        case kCGInterpolationLow:
-            qualityStr = @"Low";
-            break;
-        case kCGInterpolationMedium:
-            qualityStr = @"Medium";
-            break;
-        case kCGInterpolationHigh:
-            qualityStr = @"High";
-            break;
-        default:
-            break;
-    }
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", @(indexPath.row), qualityStr];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", @(indexPath.row), diskCacheNmae];
     cell.detailTextLabel.text = twitPicImage.tag;
     
     return cell;
+}
+
+#pragma mark - button action
+
+- (IBAction)removeMemoryCacheButtonDidPush:(id)sender
+{
+    [YSImageRequest removeAllCachedFilteringImageWithCompletion:^{
+        [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"remove all memory caches." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }];
+}
+- (IBAction)removeHighQualityDiskCacheButtonDidPush:(id)sender
+{
+    [YSImageRequest removeCachedOriginalImagesWithDiskCacheName:[self stringFromQuality:kCGInterpolationHigh] completion:^{
+        [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"remove high quality disk caches." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }];
+}
+- (IBAction)removeAllDiskCachesButtonDidPush:(id)sender
+{
+    [YSImageRequest removeAllCachedOriginalImagesWithCompletion:^{
+        [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"remove all disk caches." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }];
+}
+
+#pragma mark - utility
+
+- (NSString*)stringFromQuality:(CGInterpolationQuality)quality
+{
+    switch (quality) {
+        case kCGInterpolationDefault:
+            return @"Quality-default";
+        case kCGInterpolationHigh:
+            return @"Quality-high";
+        case kCGInterpolationLow:
+            return @"Quality-low";
+        case kCGInterpolationMedium:
+            return @"Quality-medium";
+        case kCGInterpolationNone:
+            return @"Quality-none";
+        default:
+            return nil;
+    }
 }
 
 @end
