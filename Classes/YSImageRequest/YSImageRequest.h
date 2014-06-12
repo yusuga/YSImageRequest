@@ -14,22 +14,21 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
 
 @interface YSImageRequest : NSObject
 
+@property (nonatomic) NSString *diskCacheName;        // Defualt: nil
+
+- (void)requestOriginalImageWithURL:(NSURL *)url
+                         completion:(YSImageRequestCompletion)completion;
+
+- (void)requestFilteredImageWithURL:(NSURL *)url
+                               size:(CGSize)size
+                   willRequestImage:(void (^)(void))willRequestImage
+                         completion:(YSImageRequestCompletion)completion;
 @property (nonatomic) CGInterpolationQuality quality; // Defualt: kCGInterpolationHigh
 @property (nonatomic) BOOL trimToFit;                 // Defualt: NO
 @property (nonatomic) YSImageFilterMask mask;         // Defualt: YSImageFilterMaskNone
 @property (nonatomic) CGFloat borderWidth;            // Defualt: 0.f;
 @property (nonatomic) UIColor *borderColor;           // Defualt: nil
 @property (nonatomic) CGFloat maskCornerRadius;       // Defualt: 0.f
-
-@property (nonatomic) NSString *diskCacheName;        // Defualt: nil
-
-- (void)requestWithURL:(NSURL *)url
-            completion:(YSImageRequestCompletion)completion;
-
-- (void)requestWithURL:(NSURL *)url
-                  size:(CGSize)size
-      willRequestImage:(void (^)(void))willRequestImage
-            completion:(YSImageRequestCompletion)completion;
 
 - (void)cancel;
 

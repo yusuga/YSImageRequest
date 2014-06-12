@@ -151,8 +151,9 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     return self;
 }
 
+#pragma mark - request
 
-- (void)requestWithURL:(NSURL *)url completion:(YSImageRequestCompletion)completion
+- (void)requestOriginalImageWithURL:(NSURL *)url completion:(YSImageRequestCompletion)completion
 {
     [self.imageRequestOperation cancel];
     self.imageRequestOperation = nil;
@@ -199,7 +200,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     }];
 }
 
-- (void)requestWithURL:(NSURL *)url
+- (void)requestFilteredImageWithURL:(NSURL *)url
                   size:(CGSize)size
       willRequestImage:(void (^)(void))willRequestImage
             completion:(YSImageRequestCompletion)completion
@@ -219,7 +220,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     if (willRequestImage) willRequestImage();
     
     __strong typeof(self) strongSelf = self;
-    [self requestWithURL:url completion:^(UIImage *image, NSError *error) {
+    [self requestOriginalImageWithURL:url completion:^(UIImage *image, NSError *error) {
         if (error) {
             if (completion) completion(nil, error);
             return ;
@@ -336,7 +337,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
          }
 }
 
-#pragma mark -
+#pragma mark - cancel
 
 - (void)cancel
 {
@@ -349,6 +350,8 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
                                                      withFormatName:YSImageFormatNameUserThumbnailSmall];
     self.imageEntity = nil;
 }
+
+#pragma mark - remove
 
 + (void)removeCachedOriginalImagesWithDiskCacheName:(NSString*)name completion:(void(^)(void))completion
 {
