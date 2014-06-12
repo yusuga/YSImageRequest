@@ -9,8 +9,17 @@
 #import <Foundation/Foundation.h>
 #import <YSImageFilter/YSImageFilter.h>
 #import "FICImage.h"
+@class YSImageRequest;
 
-typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
+typedef void(^YSImageRequestWillRequestImage)(YSImageRequest *request);
+typedef void(^YSImageRequestCompletion)(YSImageRequest *request, UIImage *image, NSError *error);
+
+extern NSString * const TMDiskCachePrefix;
+
+extern NSString * const YSImageRequestErrorDomain;
+typedef NS_ENUM(NSUInteger, YSImageRequestErrorCode) {
+    YSImageRequestErrorCodeCancel,
+};
 
 @interface YSImageRequest : NSObject
 
@@ -21,7 +30,7 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
 
 - (void)requestFilteredImageWithURL:(NSURL *)url
                                size:(CGSize)size
-                   willRequestImage:(void (^)(void))willRequestImage
+                   willRequestImage:(YSImageRequestWillRequestImage)willRequestImage
                          completion:(YSImageRequestCompletion)completion;
 @property (nonatomic) CGInterpolationQuality quality; // Defualt: kCGInterpolationHigh
 @property (nonatomic) BOOL trimToFit;                 // Defualt: NO
@@ -31,6 +40,9 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
 @property (nonatomic) CGFloat maskCornerRadius;       // Defualt: 0.f
 
 - (void)cancel;
+@property (nonatomic, readonly, getter = isCancelled) BOOL cancelled;
+@property (nonatomic, readonly, getter = isRequested) BOOL requested;
+@property (nonatomic, readonly, getter = isCompleted) BOOL completed;
 
 + (void)removeCachedOriginalImagesWithDiskCacheName:(NSString*)name completion:(void(^)(void))completion;
 + (void)removeAllCachedOriginalImagesWithCompletion:(void(^)(void))completion;
