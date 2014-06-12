@@ -21,6 +21,8 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
 @property (nonatomic) UIColor *borderColor;           // Defualt: nil
 @property (nonatomic) CGFloat maskCornerRadius;       // Defualt: 0.f
 
+@property (nonatomic) NSString *diskCacheName;        // Defualt: nil
+
 - (void)requestWithURL:(NSURL *)url
             completion:(YSImageRequestCompletion)completion;
 
@@ -31,8 +33,9 @@ typedef void(^YSImageRequestCompletion)(UIImage *image, NSError *error);
 
 - (void)cancel;
 
-+ (void)removeAllRequestCacheWithCompletion:(void(^)(void))completion;
-+ (void)removeAllFilterCacheWithCompletion:(void(^)(void))completion;
++ (void)removeCachedOriginalImagesWithDiskCacheName:(NSString*)name completion:(void(^)(void))completion;
++ (void)removeAllCachedOriginalImagesWithCompletion:(void(^)(void))completion;
++ (void)removeAllCachedFilteringImageWithCompletion:(void(^)(void))completion;
 
 #pragma mark - FICImage request(β)
 // FICImage: size, quality, trimToFit, mask, borderWidth, boorderColor, maskCornerRadius does not yet work.

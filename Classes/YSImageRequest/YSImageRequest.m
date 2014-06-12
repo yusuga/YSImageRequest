@@ -12,6 +12,7 @@
 #import <TMCache/TMCache.h>
 #import <MD5Digest/NSString+MD5.h>
 #import <FastImageCache/FICImageCache.h>
+#import <YSFileManager/YSFileManager.h>
 
 #if DEBUG
     #if 0
@@ -23,8 +24,9 @@
     #define LOG_YSIMAGE_REQUEST(...)
 #endif
 
-static NSString * const kRequestImageCacheName = @"YSImageRequest";
-static NSString * const kFilterImageCacheName = @"YSImageRequest-Filter";
+extern NSString *TMDiskCachePrefix;
+
+static NSString * const kDefultDiskCacheName = @"Default";
 
 static NSString * const YSImageFormatNameUserThumbnailSmall = @"jp.YuSugawara.YSImageRequest.YSImageFormatNameUserThumbnailSmall";
 static NSString * const YSImageFormatFamilyUserThumbnails = @"jp.YuSugawara.YSImageRequest.YSImageFormatFamilyUserThumbnails";
@@ -38,9 +40,9 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize size, YSImageFilterMask mask, CGFloat maskCornerRadius)
 {
     if (mask == YSImageFilterMaskRoundedCorners) {
-        return [NSString stringWithFormat:@"%@_%@_%.0f-%.0f_%f", cacheKeyFromURL(url), @(trimToFit), size.width, size.height, maskCornerRadius];
+        return [NSString stringWithFormat:@"%@%@%.0f%.0f%.0f", cacheKeyFromURL(url), @(trimToFit), size.width, size.height, maskCornerRadius];
     } else {
-        return [NSString stringWithFormat:@"%@_%@_%.0f-%.0f", cacheKeyFromURL(url), @(trimToFit), size.width, size.height];
+        return [NSString stringWithFormat:@"%@%@%.0f%.0f", cacheKeyFromURL(url), @(trimToFit), size.width, size.height];
     }
 }
 
@@ -54,17 +56,29 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
 
 @implementation YSImageRequest
 
-+ (TMDiskCache*)requestImageDiskCache
++ (NSMutableDictionary*)diskCaches
 {
-    static TMDiskCache *s_cache;
+    static NSMutableDictionary *__caches;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s_cache = [[TMDiskCache alloc] initWithName:kRequestImageCacheName];
+        __caches = [NSMutableDictionary dictionary];
     });
-    return s_cache;
+    return __caches;
 }
 
-+ (NSCache*)filterImageMemoryCache
++ (TMDiskCache*)originalImageDiskCacheWithName:(NSString*)name
+{
+    NSString *cacheName = name == nil ? kDefultDiskCacheName : name;
+    
+    TMDiskCache *cache = [self diskCaches][cacheName];
+    if (cache == nil) {
+        cache = [[TMDiskCache alloc] initWithName:cacheName];
+        [[self diskCaches] setObject:cache forKey:cacheName];
+    }
+    return cache;
+}
+
++ (NSCache*)filteredImageMemoryCache
 {
     static NSCache *s_cache;
     static dispatch_once_t onceToken;
@@ -125,7 +139,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
 + (void)didReceiveMemoryWarningNotification:(NSNotification*)notification
 {
     LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
-    [[self filterImageMemoryCache] removeAllObjects];
+    [[self filteredImageMemoryCache] removeAllObjects];
 }
 
 - (id)init
@@ -146,7 +160,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     __weak typeof(self) wself = self;
     __strong typeof(self) strongSelf = self;
     NSString *cacheKey = cacheKeyFromURL(url);
-    TMDiskCache *cache = [[self class] requestImageDiskCache];
+    TMDiskCache *cache = [[self class] originalImageDiskCacheWithName:self.diskCacheName];
     [cache objectForKey:cacheKey block:^(TMDiskCache *cache, NSString *key, UIImage<NSCoding> *cachedImage, NSURL *fileURL) {
         if (strongSelf.isCancelled) {
             LOG_YSIMAGE_REQUEST(@"cancel: before request %p", strongSelf);
@@ -194,7 +208,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     self.cancelled = NO;
     
     NSString *cacheKey = memoryCacheKeyFromURL(url, self.trimToFit, size, self.mask, self.maskCornerRadius);
-    NSCache *cache = [[self class] filterImageMemoryCache];
+    NSCache *cache = [[self class] filteredImageMemoryCache];
     UIImage *cachedImage = [cache objectForKey:cacheKey];
     if (cachedImage) {
         LOG_YSIMAGE_REQUEST(@"[Success] Cached filtered image, key: %@", cacheKey);
@@ -238,7 +252,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     __weak typeof(self) wself = self;
     __strong typeof(self) strongSelf = self;
     NSString *cacheKey = cacheKeyFromURL(url);
-    TMDiskCache *cache = [[self class] requestImageDiskCache];
+    TMDiskCache *cache = [[self class] originalImageDiskCacheWithName:self.diskCacheName];
     [cache objectForKey:cacheKey block:^(TMDiskCache *cache, NSString *key, UIImage<NSCoding> *cachedImage, NSURL *fileURL) {
         if (strongSelf.isCancelled) {
             LOG_YSIMAGE_REQUEST(@"cancel: before request %p", strongSelf);
@@ -336,18 +350,51 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     self.imageEntity = nil;
 }
 
-+ (void)removeAllRequestCacheWithCompletion:(void(^)(void))completion
++ (void)removeCachedOriginalImagesWithDiskCacheName:(NSString*)name completion:(void(^)(void))completion
 {
     LOG_YSIMAGE_REQUEST(@"%s", __func__);
-    [[self requestImageDiskCache] removeAllObjects:^(TMDiskCache *cache) {
-        if (completion) completion();
+    [[self originalImageDiskCacheWithName:name] removeAllObjects:^(TMDiskCache *cache) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) completion();
+        });
     }];
 }
 
-+ (void)removeAllFilterCacheWithCompletion:(void(^)(void))completion
++ (void)removeAllCachedOriginalImagesWithCompletion:(void(^)(void))completion
+{
+    NSArray *fileNames = [YSFileManager fileNamesAtDirectoryPath:[YSFileManager cachesDirectory]];
+    NSMutableArray *cacheNames = [NSMutableArray array];
+    for (NSString *fileName in fileNames) {
+        if ([fileName hasPrefix:TMDiskCachePrefix]) {
+            [cacheNames addObject:[fileName pathExtension]];
+        }
+    }
+    if ([cacheNames count] == 0) {
+        if (completion) completion();
+        return;
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSString *name in cacheNames) {
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            [self removeCachedOriginalImagesWithDiskCacheName:name completion:^{
+                dispatch_semaphore_signal(semaphore);
+            }];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+#if !OS_OBJECT_USE_OBJC
+            dispatch_release(semaphore);
+#endif
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) completion();
+        });
+    });
+}
+
++ (void)removeAllCachedFilteringImageWithCompletion:(void(^)(void))completion
 {
     LOG_YSIMAGE_REQUEST(@"%s", __func__);
-    [[self filterImageMemoryCache] removeAllObjects];
+    [[self filteredImageMemoryCache] removeAllObjects];
     if (completion) completion();
 }
 
