@@ -7,3 +7,4 @@ pod 'FastImageCache'
 pod 'YSFileManager'
 
 pod 'YSUIKitAdditions'
+pod 'TKRGuard'

@@ -101,10 +101,10 @@ static CGFloat const kImageSize = 50.f;
 #else
     [req requestFilteredImageWithURL:url
                    size:CGSizeMake(kImageSize, kImageSize)
-       willRequestImage:^{
+       willRequestImage:^(YSImageRequest *request) {           
            wself.imageView.image = [[wself class] placeholderImage];
        }
-             completion:^(UIImage *image, NSError *error) {
+             completion:^(YSImageRequest *request, UIImage *image, NSError *error) {                 
                  if (error) {
                      return ;
                  }

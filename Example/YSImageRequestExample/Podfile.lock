@@ -22,6 +22,7 @@ PODS:
     - AFNetworking/NSURLSession
   - FastImageCache (1.3)
   - MD5Digest (0.1.0)
+  - TKRGuard (1.0.2)
   - TMCache (1.2.0)
   - YSFileManager (0.0.3)
   - YSImageFilter (0.0.11)
@@ -31,6 +32,7 @@ DEPENDENCIES:
   - AFNetworking (~> 2.0)
   - FastImageCache
   - MD5Digest
+  - TKRGuard
   - TMCache
   - YSFileManager
   - YSImageFilter
@@ -40,6 +42,7 @@ SPEC CHECKSUMS:
   AFNetworking: e7abefee64543aa978c9d759bc8892402b1ed7d1
   FastImageCache: f0897a850a1479a95b1415eb88ed1fdce708353a
   MD5Digest: 058b7162b1fc8c30feddf10bfe66e0565797c45f
+  TKRGuard: 6d32f212e5d7fb55b6e849b1acc35873fa1f0cbb
   TMCache: ea1c509badaf9a1245422aabf3c975b3277ab138
   YSFileManager: 861157ba9b5dcdeebcf6240a9649f9604d460326
   YSImageFilter: 68eb7cdf38ae7b79b1ac052f751641a90e966cd6
