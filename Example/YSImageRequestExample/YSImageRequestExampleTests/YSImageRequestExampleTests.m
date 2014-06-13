@@ -118,9 +118,12 @@
 
 - (void)testCancelReqeustOriginalImage
 {
+    NSURL *url = [self imageURL];
+    
     YSImageRequest *req = [[YSImageRequest alloc] init];
-    [req requestOriginalImageWithURL:[self imageURL] completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
+    [req requestOriginalImageWithURL:url completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNil(image);
         XCTAssertNotNil(error, @"error: %@", error);
         XCTAssertTrue([error.domain isEqualToString:YSImageRequestErrorDomain], @"domain: %@", error.domain);
@@ -136,13 +139,17 @@
 
 - (void)testCancelRequestFilterdlImage
 {
+    NSURL *url = [self imageURL];
+    
     YSImageRequest *req = [[YSImageRequest alloc] init];
-    [req requestFilteredImageWithURL:[self imageURL] size:CGSizeMake(30, 30) willRequestImage:^(YSImageRequest *request) {
+    [req requestFilteredImageWithURL:url size:CGSizeMake(30, 30) willRequestImage:^(YSImageRequest *request) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertFalse(request.isCancelled);
         XCTAssertFalse(request.isCompleted);
     } completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNil(image);
         XCTAssertNotNil(error, @"error: %@", error);
         XCTAssertTrue([error.domain isEqualToString:YSImageRequestErrorDomain], @"domain: %@", error.domain);
@@ -160,9 +167,11 @@
 
 - (void)testRequestOriginalImage
 {
+    NSURL *url = [self imageURL];
     YSImageRequest *req = [[YSImageRequest alloc] init];
-    [req requestOriginalImageWithURL:[self imageURL] completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
+    [req requestOriginalImageWithURL:url completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNotNil(image);
         XCTAssertNil(error, @"error: %@", error);
         XCTAssertFalse(request.isCancelled);
@@ -173,8 +182,9 @@
     WAIT;
     
     YSImageRequest *req2 = [[YSImageRequest alloc] init];
-    [req2 requestOriginalImageWithURL:[self imageURL] completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
+    [req2 requestOriginalImageWithURL:url completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNotNil(image);
         XCTAssertNil(error, @"error: %@", error);
         XCTAssertFalse(request.isCancelled);
@@ -187,16 +197,20 @@
 
 - (void)testRequestFilterdImage
 {
+    NSURL *url = [self imageURL];
+    
     /* first requst */
     YSImageRequest *req = [[YSImageRequest alloc] init];
     CGSize resize = CGSizeMake(30, 30);
-    [req requestFilteredImageWithURL:[self imageURL] size:resize willRequestImage:^(YSImageRequest *request) {
+    [req requestFilteredImageWithURL:url size:resize willRequestImage:^(YSImageRequest *request) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertFalse(request.isCancelled);
         XCTAssertFalse(request.isRequested);
         XCTAssertFalse(request.isCompleted);
     } completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNotNil(image);
         XCTAssertTrue(CGSizeEqualToSize(image.size, resize), @"image.size: %@, resize: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(resize));
         XCTAssertNil(error, @"error: %@", error);
@@ -209,10 +223,11 @@
     
     /* get cached image */
     YSImageRequest *req2 = [[YSImageRequest alloc] init];
-    [req2 requestFilteredImageWithURL:[self imageURL] size:resize willRequestImage:^(YSImageRequest *request) {
+    [req2 requestFilteredImageWithURL:url size:resize willRequestImage:^(YSImageRequest *request) {
         XCTFail();
     } completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNotNil(image);
         XCTAssertTrue(CGSizeEqualToSize(image.size, resize), @"image.size: %@, resize: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(resize));
         XCTAssertNil(error, @"error: %@", error);
@@ -226,13 +241,15 @@
     /* get other resize image */
     CGSize resize2 = CGSizeMake(50, 50);
     YSImageRequest *req3 = [[YSImageRequest alloc] init];
-    [req3 requestFilteredImageWithURL:[self imageURL] size:resize2 willRequestImage:^(YSImageRequest *request) {
+    [req3 requestFilteredImageWithURL:url size:resize2 willRequestImage:^(YSImageRequest *request) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertFalse(request.isCancelled);
         XCTAssertFalse(request.isRequested);
         XCTAssertFalse(request.isCompleted);
     } completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
+        XCTAssertTrue([request.url.absoluteString isEqualToString:url.absoluteString], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNotNil(image);
         XCTAssertTrue(CGSizeEqualToSize(image.size, resize2), @"image.size: %@, resize2: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(resize2));
         XCTAssertNil(error, @"error: %@", error);
