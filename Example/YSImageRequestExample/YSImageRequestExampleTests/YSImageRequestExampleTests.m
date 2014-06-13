@@ -123,7 +123,7 @@
     YSImageRequest *req = [[YSImageRequest alloc] init];
     [req requestOriginalImageWithURL:url completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
-        XCTAssertTrue([request.url isEqual:url], @"request.url: %@, url: %@", request.url, url);
+        XCTAssertNil(request.url, @"url: %@", url);
         XCTAssertNil(image);
         XCTAssertNotNil(error, @"error: %@", error);
         XCTAssertTrue([error.domain isEqualToString:YSImageRequestErrorDomain], @"domain: %@", error.domain);
@@ -149,7 +149,7 @@
         XCTAssertFalse(request.isCompleted);
     } completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
-        XCTAssertTrue([request.url isEqual:url], @"request.url: %@, url: %@", request.url, url);
+        XCTAssertNil(request.url, @"url: %@", url);
         XCTAssertNil(image);
         XCTAssertNotNil(error, @"error: %@", error);
         XCTAssertTrue([error.domain isEqualToString:YSImageRequestErrorDomain], @"domain: %@", error.domain);
