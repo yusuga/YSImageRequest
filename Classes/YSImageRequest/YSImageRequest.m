@@ -421,6 +421,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     [self setCancelled:YES];
     [self.imageRequestOperation cancel];
     self.imageRequestOperation = nil;
+    _url = nil;
     
     [[FICImageCache sharedImageCache] cancelImageRetrievalForEntity:self.imageEntity
                                                      withFormatName:YSImageFormatNameUserThumbnailSmall];
