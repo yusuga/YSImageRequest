@@ -32,6 +32,9 @@ typedef NS_ENUM(NSUInteger, YSImageRequestErrorCode) {
                                size:(CGSize)size
                    willRequestImage:(YSImageRequestWillRequestImage)willRequestImage
                          completion:(YSImageRequestCompletion)completion;
+
+@property (nonatomic, readonly) NSURL *url;
+
 @property (nonatomic) CGInterpolationQuality quality; // Defualt: kCGInterpolationHigh
 @property (nonatomic) BOOL trimToFit;                 // Defualt: NO
 @property (nonatomic) YSImageFilterMask mask;         // Defualt: YSImageFilterMaskNone

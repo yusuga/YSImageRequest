@@ -162,6 +162,8 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     [self.imageRequestOperation cancel];
     self.imageRequestOperation = nil;
     
+    _url = url;
+    
     __strong typeof(self) strongSelf = self;
     NSString *cacheKey = cacheKeyFromURL(url);
     TMDiskCache *cache = [[self class] originalImageDiskCacheWithName:self.diskCacheName];
@@ -218,6 +220,8 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
 {
     [self cancel];
     [self setCancelled:NO];
+    
+    _url = url;
     
     NSString *cacheKey = memoryCacheKeyFromURL(url, self.trimToFit, size, self.mask, self.maskCornerRadius);
     NSCache *cache = [[self class] filteredImageMemoryCache];
