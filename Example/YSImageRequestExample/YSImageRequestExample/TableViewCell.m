@@ -74,16 +74,17 @@ static CGFloat const kImageSize = 50.f;
 - (void)setImageWithURL:(NSURL*)url quality:(CGInterpolationQuality)quality diskCacheName:(NSString *)diskCacheName
 {
     [self cancelImageRequest];
-
-    YSImageRequest *req = [[YSImageRequest alloc] init];
-    req.quality = quality;
-    req.trimToFit = NO;
-    req.mask = YSImageFilterMaskRoundedCorners;
-    req.borderWidth = 5.f;
-    req.borderColor = [UIColor redColor];
-    req.maskCornerRadius = 0.f;
     
-    req.diskCacheName = diskCacheName;
+    YSImageFilter *filter = [[YSImageFilter alloc] init];
+    filter.size = CGSizeMake(kImageSize, kImageSize);
+    filter.quality = quality;
+    filter.trimToFit = NO;
+    filter.mask = YSImageFilterMaskRoundedCorners;
+    filter.borderWidth = 5.f;
+    filter.borderColor = [UIColor redColor];
+    filter.maskCornerRadius = 0.f;
+
+    YSImageRequest *req = [[YSImageRequest alloc] initWithDiskCacheName:diskCacheName];
     
     __weak typeof(self) wself = self;
 #if kUseFICImage
@@ -100,16 +101,15 @@ static CGFloat const kImageSize = 50.f;
                   }];
 #else
     [req requestFilteredImageWithURL:url
-                   size:CGSizeMake(kImageSize, kImageSize)
-       willRequestImage:^(YSImageRequest *request) {           
-           wself.imageView.image = [[wself class] placeholderImage];
-       }
-             completion:^(YSImageRequest *request, UIImage *image, NSError *error) {                 
-                 if (error) {
-                     return ;
-                 }
-                 wself.imageView.image = image;
-             }];
+                              filter:filter
+                    willRequestImage:^(YSImageRequest *request) {
+                        wself.imageView.image = [[wself class] placeholderImage];
+                    } completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
+                        if (error) {
+                            return ;
+                        }
+                        wself.imageView.image = image;
+                    }];
 #endif
     self.imageRequest = req;
 }

@@ -1,23 +1,23 @@
 PODS:
-  - AFNetworking (2.3.0):
+  - AFNetworking (2.3.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
     - AFNetworking/UIKit
-  - AFNetworking/NSURLConnection (2.3.0):
+  - AFNetworking/NSURLConnection (2.3.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.3.0):
+  - AFNetworking/NSURLSession (2.3.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.3.0)
-  - AFNetworking/Security (2.3.0)
-  - AFNetworking/Serialization (2.3.0)
-  - AFNetworking/UIKit (2.3.0):
+  - AFNetworking/Reachability (2.3.1)
+  - AFNetworking/Security (2.3.1)
+  - AFNetworking/Serialization (2.3.1)
+  - AFNetworking/UIKit (2.3.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - FastImageCache (1.3)
@@ -25,8 +25,8 @@ PODS:
   - TKRGuard (1.0.2)
   - TMCache (1.2.0)
   - YSFileManager (0.0.3)
-  - YSImageFilter (0.0.11)
-  - YSUIKitAdditions (0.0.15)
+  - YSImageFilter (0.1.0)
+  - YSUIKitAdditions (0.0.19)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
@@ -39,13 +39,13 @@ DEPENDENCIES:
   - YSUIKitAdditions
 
 SPEC CHECKSUMS:
-  AFNetworking: e7abefee64543aa978c9d759bc8892402b1ed7d1
+  AFNetworking: 6d7b76aa5d04c8c37daad3eef4b7e3f2a7620da3
   FastImageCache: f0897a850a1479a95b1415eb88ed1fdce708353a
   MD5Digest: 058b7162b1fc8c30feddf10bfe66e0565797c45f
   TKRGuard: 6d32f212e5d7fb55b6e849b1acc35873fa1f0cbb
   TMCache: ea1c509badaf9a1245422aabf3c975b3277ab138
   YSFileManager: 861157ba9b5dcdeebcf6240a9649f9604d460326
-  YSImageFilter: 68eb7cdf38ae7b79b1ac052f751641a90e966cd6
-  YSUIKitAdditions: ec26963eeafd6ee2974a54e50f46eae77a4a4448
+  YSImageFilter: 5b2e6927a59abdccfbfa6221b0cda78441be0a4b
+  YSUIKitAdditions: f045daa865c114933d1be0e3ae83d8d7f7983546
 
 COCOAPODS: 0.33.0

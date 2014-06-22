@@ -141,8 +141,11 @@
 {
     NSURL *url = [self imageURL];
     
+    YSImageFilter *filter = [[YSImageFilter alloc] init];
+    filter.size = CGSizeMake(30.f, 30.f);
+    
     YSImageRequest *req = [[YSImageRequest alloc] init];
-    [req requestFilteredImageWithURL:url size:CGSizeMake(30, 30) willRequestImage:^(YSImageRequest *request) {
+    [req requestFilteredImageWithURL:url filter:filter willRequestImage:^(YSImageRequest *request) {
         XCTAssertNotNil(request);
         XCTAssertTrue([request.url isEqual:url], @"request.url: %@, url: %@", request.url, url);
         XCTAssertFalse(request.isCancelled);
@@ -199,10 +202,12 @@
 {
     NSURL *url = [self imageURL];
     
+    YSImageFilter *filter = [[YSImageFilter alloc] init];
+    filter.size = CGSizeMake(30.f, 30.f);
+    
     /* first requst */
     YSImageRequest *req = [[YSImageRequest alloc] init];
-    CGSize resize = CGSizeMake(30, 30);
-    [req requestFilteredImageWithURL:url size:resize willRequestImage:^(YSImageRequest *request) {
+    [req requestFilteredImageWithURL:url filter:filter willRequestImage:^(YSImageRequest *request) {
         XCTAssertNotNil(request);
         XCTAssertTrue([request.url isEqual:url], @"request.url: %@, url: %@", request.url, url);
         XCTAssertFalse(request.isCancelled);
@@ -212,7 +217,7 @@
         XCTAssertNotNil(request);
         XCTAssertTrue([request.url isEqual:url], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNotNil(image);
-        XCTAssertTrue(CGSizeEqualToSize(image.size, resize), @"image.size: %@, resize: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(resize));
+        XCTAssertTrue(CGSizeEqualToSize(image.size, filter.size), @"image.size: %@, resize: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(filter.size));
         XCTAssertNil(error, @"error: %@", error);
         XCTAssertFalse(request.isCancelled);
         XCTAssertTrue(request.isRequested);
@@ -223,13 +228,13 @@
     
     /* get cached image */
     YSImageRequest *req2 = [[YSImageRequest alloc] init];
-    [req2 requestFilteredImageWithURL:url size:resize willRequestImage:^(YSImageRequest *request) {
+    [req2 requestFilteredImageWithURL:url filter:filter willRequestImage:^(YSImageRequest *request) {
         XCTFail();
     } completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
         XCTAssertNotNil(request);
         XCTAssertTrue([request.url isEqual:url], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNotNil(image);
-        XCTAssertTrue(CGSizeEqualToSize(image.size, resize), @"image.size: %@, resize: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(resize));
+        XCTAssertTrue(CGSizeEqualToSize(image.size, filter.size), @"image.size: %@, resize: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(filter.size));
         XCTAssertNil(error, @"error: %@", error);
         XCTAssertFalse(request.isCancelled);
         XCTAssertFalse(request.isRequested);
@@ -239,9 +244,9 @@
     WAIT;
     
     /* get other resize image */
-    CGSize resize2 = CGSizeMake(50, 50);
+    filter.size = CGSizeMake(50, 50);
     YSImageRequest *req3 = [[YSImageRequest alloc] init];
-    [req3 requestFilteredImageWithURL:url size:resize2 willRequestImage:^(YSImageRequest *request) {
+    [req3 requestFilteredImageWithURL:url filter:filter willRequestImage:^(YSImageRequest *request) {
         XCTAssertNotNil(request);
         XCTAssertTrue([request.url isEqual:url], @"request.url: %@, url: %@", request.url, url);
         XCTAssertFalse(request.isCancelled);
@@ -251,7 +256,7 @@
         XCTAssertNotNil(request);
         XCTAssertTrue([request.url isEqual:url], @"request.url: %@, url: %@", request.url, url);
         XCTAssertNotNil(image);
-        XCTAssertTrue(CGSizeEqualToSize(image.size, resize2), @"image.size: %@, resize2: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(resize2));
+        XCTAssertTrue(CGSizeEqualToSize(image.size, filter.size), @"image.size: %@, resize2: %@", NSStringFromCGSize(image.size), NSStringFromCGSize(filter.size));
         XCTAssertNil(error, @"error: %@", error);
         XCTAssertFalse(request.isCancelled);
         XCTAssertFalse(request.isRequested);
