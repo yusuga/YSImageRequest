@@ -8,7 +8,6 @@
 
 #import "FICImage.h"
 #import <FastImageCache/FICUtilities.h>
-#import <YSImageFilter/YSImageFilter.h>
 
 @interface FICImage ()
 

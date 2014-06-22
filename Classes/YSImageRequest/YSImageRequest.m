@@ -25,8 +25,7 @@
 #endif
 
 NSString * const YSImageRequestErrorDomain = @"YSImageRequestErrorDomain";
-
-static NSString * const kDefultDiskCacheName = @"Default";
+NSString * const kYSImageRequestDefultDiskCacheName = @"Default";
 
 static NSString * const YSImageFormatNameUserThumbnailSmall = @"jp.YuSugawara.YSImageRequest.YSImageFormatNameUserThumbnailSmall";
 static NSString * const YSImageFormatFamilyUserThumbnails = @"jp.YuSugawara.YSImageRequest.YSImageFormatFamilyUserThumbnails";
@@ -70,7 +69,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
 
 + (TMDiskCache*)originalImageDiskCacheWithName:(NSString*)name
 {
-    NSString *cacheName = name == nil ? kDefultDiskCacheName : name;
+    NSString *cacheName = name == nil ? kYSImageRequestDefultDiskCacheName : name;
     
     TMDiskCache *cache = [self diskCaches][cacheName];
     if (cache == nil) {
@@ -133,6 +132,14 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     sharedImageCache.formats = imageFormats;
 }
 
+- (instancetype)initWithDiskCacheName:(NSString*)diskCacheName
+{
+    if (self = [super init]) {
+        _diskCacheName = diskCacheName;
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
@@ -142,15 +149,6 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
 {
     LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
     [[self filteredImageMemoryCache] removeAllObjects];
-}
-
-- (id)init
-{
-    if (self = [super init]) {
-        self.quality = kCGInterpolationHigh;
-        self.mask = YSImageFilterMaskNone;
-    }
-    return self;
 }
 
 #pragma mark - request
@@ -214,16 +212,16 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
 }
 
 - (void)requestFilteredImageWithURL:(NSURL *)url
-                  size:(CGSize)size
-      willRequestImage:(YSImageRequestWillRequestImage)willRequestImage
-            completion:(YSImageRequestCompletion)completion
+                             filter:(YSImageFilter *)filter
+                   willRequestImage:(YSImageRequestWillRequestImage)willRequestImage
+                         completion:(YSImageRequestCompletion)completion
 {
     [self cancel];
     [self setCancelled:NO];
     
     _url = url;
     
-    NSString *cacheKey = memoryCacheKeyFromURL(url, self.trimToFit, size, self.mask, self.maskCornerRadius);
+    NSString *cacheKey = memoryCacheKeyFromURL(url, filter.trimToFit, filter.size, filter.mask, filter.maskCornerRadius);
     NSCache *cache = [[self class] filteredImageMemoryCache];
     UIImage *cachedImage = [cache objectForKey:cacheKey];
     if (cachedImage) {
@@ -242,19 +240,18 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
             return ;
         }
         dispatch_async([YSImageRequest filterDispatchQueue], ^{
-            [YSImageFilter resizeWithImage:image size:size quality:strongSelf.quality trimToFit:strongSelf.trimToFit mask:strongSelf.mask borderWidth:strongSelf.borderWidth borderColor:strongSelf.borderColor maskCornerRadius:strongSelf.maskCornerRadius completion:^(UIImage *filterdImage)
-             {
-                 if (strongSelf.isCancelled) {
-                     LOG_YSIMAGE_REQUEST(@"cancel: filtered %p", strongSelf);
-                     [strongSelf setCompleted:NO];
-                     if (completion) completion(strongSelf, nil, [[strongSelf class] cancelError]);
-                     return ;
-                 }
-                 LOG_YSIMAGE_REQUEST(@"size %@", NSStringFromCGSize(filterdImage.size));
-                 [strongSelf setCompleted:YES];
-                 if (completion) completion(strongSelf, filterdImage, nil);
-                 if (filterdImage && cacheKey) [cache setObject:filterdImage forKey:cacheKey];
-             }];
+            [image ys_filter:filter withCompletion:^(UIImage *filterdImage) {
+                if (strongSelf.isCancelled) {
+                    LOG_YSIMAGE_REQUEST(@"cancel: filtered %p", strongSelf);
+                    [strongSelf setCompleted:NO];
+                    if (completion) completion(strongSelf, nil, [[strongSelf class] cancelError]);
+                    return ;
+                }
+                LOG_YSIMAGE_REQUEST(@"size %@", NSStringFromCGSize(filterdImage.size));
+                [strongSelf setCompleted:YES];
+                if (completion) completion(strongSelf, filterdImage, nil);
+                if (filterdImage && cacheKey) [cache setObject:filterdImage forKey:cacheKey];
+            }];
         });
     }];
 }

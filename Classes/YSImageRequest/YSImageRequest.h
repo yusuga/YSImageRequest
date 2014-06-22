@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <YSImageFilter/YSImageFilter.h>
+#import <YSImageFilter/UIImage+YSImageFilter.h>
 #import "FICImage.h"
 @class YSImageRequest;
 
@@ -21,26 +21,22 @@ typedef NS_ENUM(NSUInteger, YSImageRequestErrorCode) {
     YSImageRequestErrorCodeCancel,
 };
 
+extern NSString * const kYSImageRequestDefultDiskCacheName;
+
 @interface YSImageRequest : NSObject
 
-@property (nonatomic) NSString *diskCacheName;        // Defualt: nil
+- (instancetype)initWithDiskCacheName:(NSString*)diskCacheName; // diskCacheName: nil == kDefultDiskCacheName
+@property (nonatomic, readonly) NSString *diskCacheName;
 
 - (void)requestOriginalImageWithURL:(NSURL *)url
                          completion:(YSImageRequestCompletion)completion;
 
 - (void)requestFilteredImageWithURL:(NSURL *)url
-                               size:(CGSize)size
+                             filter:(YSImageFilter*)filter
                    willRequestImage:(YSImageRequestWillRequestImage)willRequestImage
                          completion:(YSImageRequestCompletion)completion;
 
 @property (nonatomic, readonly) NSURL *url;
-
-@property (nonatomic) CGInterpolationQuality quality; // Defualt: kCGInterpolationHigh
-@property (nonatomic) BOOL trimToFit;                 // Defualt: NO
-@property (nonatomic) YSImageFilterMask mask;         // Defualt: YSImageFilterMaskNone
-@property (nonatomic) CGFloat borderWidth;            // Defualt: 0.f;
-@property (nonatomic) UIColor *borderColor;           // Defualt: nil
-@property (nonatomic) CGFloat maskCornerRadius;       // Defualt: 0.f
 
 - (void)cancel;
 @property (nonatomic, readonly, getter = isCancelled) BOOL cancelled;
