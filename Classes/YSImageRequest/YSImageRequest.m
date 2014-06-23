@@ -25,7 +25,7 @@
 #endif
 
 NSString * const YSImageRequestErrorDomain = @"YSImageRequestErrorDomain";
-NSString * const kYSImageRequestDefultDiskCacheName = @"Default";
+NSString * const kYSImageRequestDefultDiskCacheName = @"Cache";
 
 static NSString * const YSImageFormatNameUserThumbnailSmall = @"jp.YuSugawara.YSImageRequest.YSImageFormatNameUserThumbnailSmall";
 static NSString * const YSImageFormatFamilyUserThumbnails = @"jp.YuSugawara.YSImageRequest.YSImageFormatFamilyUserThumbnails";
