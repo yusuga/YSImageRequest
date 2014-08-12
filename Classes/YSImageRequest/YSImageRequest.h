@@ -46,6 +46,8 @@ extern NSString * const kYSImageRequestDefultDiskCacheName;
 + (void)removeCachedOriginalImagesWithDiskCacheName:(NSString*)name completion:(void(^)(void))completion;
 + (void)removeAllCachedOriginalImagesWithCompletion:(void(^)(void))completion;
 + (void)removeAllCachedFilteringImageWithCompletion:(void(^)(void))completion;
+- (void)removeCachedOriginalImagesWithElapsedTimeInterval:(NSTimeInterval)elapsedTimeInterval
+                                               completion:(void(^)(void))completion;
 
 #pragma mark - FICImage request(β)
 // FICImage: size, quality, trimToFit, mask, borderWidth, boorderColor, maskCornerRadius does not yet work.

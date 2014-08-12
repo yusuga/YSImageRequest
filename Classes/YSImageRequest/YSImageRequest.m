@@ -410,6 +410,42 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     if (completion) completion();
 }
 
+- (void)removeAllCachedOriginalImagesWithElapsedTimeInterval:(NSTimeInterval)elapsedTimeInterval
+                                                  completion:(void(^)(void))completion
+{
+    NSArray *fileNames = [YSFileManager fileNamesAtDirectoryPath:[YSFileManager cachesDirectory]];
+    NSMutableArray *cacheNames = [NSMutableArray array];
+    for (NSString *fileName in fileNames) {
+        if ([fileName hasPrefix:TMDiskCachePrefix]) {
+            [cacheNames addObject:[fileName pathExtension]];
+        }
+    }
+    if ([cacheNames count] == 0) {
+        if (completion) completion();
+        return;
+    }
+    
+    __strong typeof(self) strongSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSString *name in cacheNames) {
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            [[[strongSelf class] originalImageDiskCacheWithName:name] trimToDate:[NSDate dateWithTimeIntervalSinceNow:-elapsedTimeInterval] block:^(TMDiskCache *cache) {
+                dispatch_semaphore_signal(semaphore);
+            }];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+#if !OS_OBJECT_USE_OBJC
+            dispatch_release(semaphore);
+#endif
+            if (strongSelf.isCancelled) {
+                break;
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) completion();
+        });
+    });
+}
+
 #pragma mark - state
      
 - (void)cancel
