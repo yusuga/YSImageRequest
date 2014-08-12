@@ -410,8 +410,8 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     if (completion) completion();
 }
 
-- (void)removeAllCachedOriginalImagesWithElapsedTimeInterval:(NSTimeInterval)elapsedTimeInterval
-                                                  completion:(void(^)(void))completion
+- (void)removeCachedOriginalImagesWithElapsedTimeInterval:(NSTimeInterval)elapsedTimeInterval
+                                               completion:(void(^)(void))completion
 {
     NSArray *fileNames = [YSFileManager fileNamesAtDirectoryPath:[YSFileManager cachesDirectory]];
     NSMutableArray *cacheNames = [NSMutableArray array];
