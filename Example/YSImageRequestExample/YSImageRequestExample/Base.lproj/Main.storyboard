@@ -44,11 +44,6 @@
                         </connections>
                     </tableView>
                     <toolbarItems>
-                        <barButtonItem title="rm memory" id="2dH-F5-ry3">
-                            <connections>
-                                <action selector="removeMemoryCacheButtonDidPush:" destination="YcZ-Re-yeC" id="Gh9-R3-z9U"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="4A1-wc-yzF"/>
                         <barButtonItem title="rm disk" id="MTw-IF-8NF">
                             <connections>
@@ -61,8 +56,20 @@
                                 <action selector="removeAllDiskCachesButtonDidPush:" destination="YcZ-Re-yeC" id="AoJ-BI-u9u"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="6Tc-gq-XVi"/>
+                        <barButtonItem title="rm date" id="FLt-qD-c9L">
+                            <connections>
+                                <action selector="removeDiskCachesDate:" destination="YcZ-Re-yeC" id="bGe-WE-cUh"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" id="D2T-qu-wdJ"/>
+                    <navigationItem key="navigationItem" id="D2T-qu-wdJ">
+                        <barButtonItem key="rightBarButtonItem" title="rm memory" id="2dH-F5-ry3">
+                            <connections>
+                                <action selector="removeMemoryCacheButtonDidPush:" destination="YcZ-Re-yeC" id="Gh9-R3-z9U"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qkU-5r-5nM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

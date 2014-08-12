@@ -21,6 +21,7 @@ static NSString * const kCellIdentifier = @"Cell";
 
 @property (nonatomic) AFHTTPRequestOperation *requestOperation;
 @property (nonatomic) NSMutableArray *twitPicImages;
+@property (nonatomic) YSImageRequest *removeImageRequest;
 
 @end
 
@@ -167,6 +168,22 @@ static NSString * const kCellIdentifier = @"Cell";
     [YSImageRequest removeAllCachedOriginalImagesWithCompletion:^{
         [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"remove all disk caches." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
+}
+
+- (IBAction)removeDiskCachesDate:(id)sender
+{
+    if (self.removeImageRequest) {
+        [self.removeImageRequest cancel];
+        self.removeImageRequest = nil;
+    } else {
+        self.removeImageRequest = [[YSImageRequest alloc] init];
+        NSLog(@"remove");
+        __weak typeof(self) wself = self;
+        [self.removeImageRequest removeCachedOriginalImagesWithElapsedTimeInterval:10 completion:^{
+            NSLog(@"remove completion");
+            wself.removeImageRequest = nil;
+        }];
+    }
 }
 
 #pragma mark - utility
