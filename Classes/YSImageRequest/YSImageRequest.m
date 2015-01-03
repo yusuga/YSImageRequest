@@ -11,7 +11,6 @@
 #import <AFNetworking/AFNetworking.h>
 #import <TMCache/TMCache.h>
 #import <MD5Digest/NSString+MD5.h>
-#import <FastImageCache/FICImageCache.h>
 #import <YSFileManager/YSFileManager.h>
 
 #if DEBUG
@@ -48,7 +47,6 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
 @interface YSImageRequest ()
 
 @property (nonatomic) AFHTTPRequestOperation *imageRequestOperation;
-@property (nonatomic) FICImage *imageEntity;
 
 @end
 
@@ -112,24 +110,6 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
         s_queue = dispatch_queue_create("jp.YuSugawara.YSImageRequest.filter.queue", NULL);
     });
     return s_queue;
-}
-
-+ (void)setupFICImageFormats
-{
-    FICImageFormat *smallUserThumbnailImageFormat = [[FICImageFormat alloc] init];
-    smallUserThumbnailImageFormat.name = YSImageFormatNameUserThumbnailSmall;
-    smallUserThumbnailImageFormat.family = YSImageFormatFamilyUserThumbnails;
-    smallUserThumbnailImageFormat.style = FICImageFormatStyle16BitBGR;
-    smallUserThumbnailImageFormat.imageSize = CGSizeMake(50, 50);
-    smallUserThumbnailImageFormat.maximumCount = 250;
-    smallUserThumbnailImageFormat.devices = FICImageFormatDevicePhone;
-    smallUserThumbnailImageFormat.protectionMode = FICImageFormatProtectionModeNone;
-    
-    NSArray *imageFormats = @[smallUserThumbnailImageFormat];
-    
-    FICImageCache *sharedImageCache = [FICImageCache sharedImageCache];
-    //    sharedImageCache.delegate = self;
-    sharedImageCache.formats = imageFormats;
 }
 
 - (instancetype)initWithDiskCacheName:(NSString*)diskCacheName
@@ -256,110 +236,6 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     }];
 }
 
-#pragma mark - FastImageCache
-
-- (void)requestWithFICImage:(FICImage *)imageEntitiy
-                 completion:(YSImageRequestCompletion)completion
-{
-    [self setCompleted:NO];
-    [self setRequested:NO];
-    [self.imageRequestOperation cancel];
-    self.imageRequestOperation = nil;
-    
-    NSURL *url = imageEntitiy.sourceImageURL;
-    
-    __strong typeof(self) strongSelf = self;
-    NSString *cacheKey = cacheKeyFromURL(url);
-    TMDiskCache *cache = [[self class] originalImageDiskCacheWithName:self.diskCacheName];
-    [cache objectForKey:cacheKey block:^(TMDiskCache *cache, NSString *key, UIImage<NSCoding> *cachedImage, NSURL *fileURL) {
-        if (strongSelf.isCancelled) {
-            LOG_YSIMAGE_REQUEST(@"cancel: before request %p", strongSelf);
-            if (completion) completion(strongSelf, nil, [[strongSelf class] cancelError]);
-            return ;
-        }
-        void(^DidReciveImage)(UIImage *recivedImage) = ^(UIImage *recivedImage){
-            [[FICImageCache sharedImageCache] setImage:recivedImage forEntity:imageEntitiy withFormatName:YSImageFormatNameUserThumbnailSmall completionBlock:^(id <FICEntity> entity, NSString *formatName, UIImage *image)
-             {
-                 NSLog(@"Processed and stored image for entity: %@", entity);
-                 [strongSelf setCompleted:YES];
-                 if (completion) completion(strongSelf, image, nil);
-             }];
-        };
-        
-        if (cachedImage) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                DidReciveImage(cachedImage);
-            });
-            return;
-        }
-        NSURLRequest *req = [NSURLRequest requestWithURL:url];
-        
-        [strongSelf setRequested:YES];
-        AFHTTPRequestOperation *ope = [[AFHTTPRequestOperationManager manager] HTTPRequestOperationWithRequest:req success:^(AFHTTPRequestOperation *operation, UIImage *responseImage)
-                                       {
-                                           if (strongSelf.isCancelled) {
-                                               LOG_YSIMAGE_REQUEST(@"cancel: success request %p", strongSelf);
-                                               if (completion) completion(strongSelf, nil, [[strongSelf class] cancelError]);
-                                               return ;
-                                           }
-                                           LOG_YSIMAGE_REQUEST(@"[Success] request url: %@", req.URL.absoluteString);
-                                           
-                                           DidReciveImage(responseImage);
-                                           [cache setObject:responseImage forKey:cacheKey block:nil];
-                                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                           LOG_YSIMAGE_REQUEST(@"[Failure] operation: %@, error: %@", operation, error);
-                                           if (strongSelf.isCancelled) {
-                                               LOG_YSIMAGE_REQUEST(@"cancel: failure request %p", strongSelf);
-                                               if (completion) completion(strongSelf, nil, [[strongSelf class] cancelError]);
-                                               return ;
-                                           }
-                                           if (completion) completion(strongSelf, nil, error);
-                                       }];
-        ope.responseSerializer = [AFImageResponseSerializer serializer];
-        
-        [[[strongSelf class] imageRequestOperationQueue] addOperation:ope];
-        strongSelf.imageRequestOperation = ope;
-    }];
-}
-
-- (void)requestWithFICImage:(FICImage *)imageEntitiy
-                       size:(CGSize)size
-           willRequestImage:(void (^)(void))willRequestImage
-                 completion:(YSImageRequestCompletion)completion
-{
-    [self cancel];
-    [self setCancelled:NO];
-    self.imageEntity = imageEntitiy;
-    
-    NSLog(@"[FICImage] size, quality, trimToFit, mask, borderWidth, boorderColor, maskCornerRadius does not yet work");
-    
-    __strong typeof(self) strongSelf = self;
-    if (![[FICImageCache sharedImageCache] retrieveImageForEntity:imageEntitiy withFormatName:YSImageFormatNameUserThumbnailSmall completionBlock:^(id<FICEntity> entity, NSString *formatName, UIImage *image)
-         {
-             if (strongSelf.isCancelled) {
-                 LOG_YSIMAGE_REQUEST(@"cancel: filtered %p", strongSelf);
-                 if (completion) completion(strongSelf, nil, [[strongSelf class] cancelError]);
-                 return ;
-             }
-             if (completion) completion(strongSelf, image, nil);
-         }]) {
-             if (willRequestImage) willRequestImage();
-             
-             [strongSelf requestWithFICImage:imageEntitiy completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
-                 if (request.isCancelled) {
-                     LOG_YSIMAGE_REQUEST(@"cancel: filtered %p", request);
-                     if (completion) completion(strongSelf, nil, [[strongSelf class] cancelError]);
-                     return ;
-                 }
-                 if (error) {
-                     if (completion) completion(request, nil, error);
-                     return ;
-                 }
-                 [request requestWithFICImage:imageEntitiy size:size willRequestImage:willRequestImage completion:completion];
-             }];
-         }
-}
-
 #pragma mark - remove
 
 + (void)removeCachedOriginalImagesWithDiskCacheName:(NSString*)name completion:(void(^)(void))completion
@@ -454,11 +330,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, BOOL trimToFit, CGSize
     [self setCancelled:YES];
     [self.imageRequestOperation cancel];
     self.imageRequestOperation = nil;
-    _url = nil;
-    
-    [[FICImageCache sharedImageCache] cancelImageRetrievalForEntity:self.imageEntity
-                                                     withFormatName:YSImageFormatNameUserThumbnailSmall];
-    self.imageEntity = nil;
+    _url = nil;    
 }
 
 - (void)setCancelled:(BOOL)cancelled

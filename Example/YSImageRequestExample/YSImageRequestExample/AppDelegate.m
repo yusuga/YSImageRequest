@@ -7,10 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import <FastImageCache/FICImageCache.h>
-#import "FICImage.h"
 
-@interface AppDelegate () //<FICImageCacheDelegate>
+@interface AppDelegate ()
 
 @end
 

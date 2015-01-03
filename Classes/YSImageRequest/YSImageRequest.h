@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <YSImageFilter/UIImage+YSImageFilter.h>
-#import "FICImage.h"
 @class YSImageRequest;
 
 typedef void(^YSImageRequestWillRequestImage)(YSImageRequest *request);
@@ -48,13 +47,5 @@ extern NSString * const kYSImageRequestDefultDiskCacheName;
 + (void)removeAllCachedFilteringImageWithCompletion:(void(^)(void))completion;
 - (void)removeCachedOriginalImagesWithElapsedTimeInterval:(NSTimeInterval)elapsedTimeInterval
                                                completion:(void(^)(void))completion;
-
-#pragma mark - FICImage request(β)
-// FICImage: size, quality, trimToFit, mask, borderWidth, boorderColor, maskCornerRadius does not yet work.
-+ (void)setupFICImageFormats;
-- (void)requestWithFICImage:(FICImage *)imageEntitiy
-                       size:(CGSize)size
-           willRequestImage:(void (^)(void))willRequestImage
-                 completion:(YSImageRequestCompletion)completion;
 
 @end
