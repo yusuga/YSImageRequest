@@ -19,13 +19,6 @@
 #define LOG_YSIMAGE_REQUEST(...)
 #endif
 
-NSString * const YSImageRequestErrorDomain = @"YSImageRequestErrorDomain";
-NSString * const kYSImageRequestDefultDiskCacheName = @"Cache";
-
-static NSString * const YSImageFormatNameUserThumbnailSmall = @"jp.YuSugawara.YSImageRequest.YSImageFormatNameUserThumbnailSmall";
-static NSString * const YSImageFormatFamilyUserThumbnails = @"jp.YuSugawara.YSImageRequest.YSImageFormatFamilyUserThumbnails";
-typedef void(^YSImageRequestFastImageCacheCompletion)(UIImage *image, NSError *error);
-
 static inline NSString *cacheKeyFromURL(NSURL *url)
 {
     return url.absoluteString.MD5Digest;
