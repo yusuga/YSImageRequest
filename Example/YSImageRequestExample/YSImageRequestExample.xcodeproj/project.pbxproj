@@ -487,6 +487,7 @@
 					"\"SystemConfiguration\"",
 					"-weak_framework",
 					"\"UIKit\"",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -527,6 +528,7 @@
 					"\"SystemConfiguration\"",
 					"-weak_framework",
 					"\"UIKit\"",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
