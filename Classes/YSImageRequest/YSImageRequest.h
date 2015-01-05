@@ -7,45 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <SDWebImage/SDWebImageManager.h>
 #import <YSImageFilter/UIImage+YSImageFilter.h>
 @class YSImageRequest;
 
-typedef void(^YSImageRequestWillRequestImage)(YSImageRequest *request);
 typedef void(^YSImageRequestCompletion)(YSImageRequest *request, UIImage *image, NSError *error);
 
-extern NSString * const TMDiskCachePrefix;
+@interface YSImageRequest : NSObject <SDWebImageOperation>
 
-extern NSString * const YSImageRequestErrorDomain;
-typedef NS_ENUM(NSUInteger, YSImageRequestErrorCode) {
-    YSImageRequestErrorCodeCancel,
-};
-
-extern NSString * const kYSImageRequestDefultDiskCacheName;
-
-@interface YSImageRequest : NSObject
-
-- (instancetype)initWithDiskCacheName:(NSString*)diskCacheName; // diskCacheName: nil == kDefultDiskCacheName
-@property (nonatomic, readonly) NSString *diskCacheName;
-
-- (void)requestOriginalImageWithURL:(NSURL *)url
-                         completion:(YSImageRequestCompletion)completion;
-
-- (void)requestFilteredImageWithURL:(NSURL *)url
-                             filter:(YSImageFilter*)filter
-                   willRequestImage:(YSImageRequestWillRequestImage)willRequestImage
-                         completion:(YSImageRequestCompletion)completion;
-
-@property (nonatomic, readonly) NSURL *url;
++ (YSImageRequest <SDWebImageOperation>*)requestImageWithURL:(NSURL*)url
+                                                     options:(SDWebImageOptions)options
+                                                      filter:(YSImageFilter*)filter
+                                                    progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                                                  completion:(YSImageRequestCompletion)completion;
 
 - (void)cancel;
 @property (nonatomic, readonly, getter = isCancelled) BOOL cancelled;
-@property (nonatomic, readonly, getter = isRequested) BOOL requested;
-@property (nonatomic, readonly, getter = isCompleted) BOOL completed;
 
-+ (void)removeCachedOriginalImagesWithDiskCacheName:(NSString*)name completion:(void(^)(void))completion;
-+ (void)removeAllCachedOriginalImagesWithCompletion:(void(^)(void))completion;
-+ (void)removeAllCachedFilteringImageWithCompletion:(void(^)(void))completion;
-- (void)removeCachedOriginalImagesWithElapsedTimeInterval:(NSTimeInterval)elapsedTimeInterval
-                                               completion:(void(^)(void))completion;
++ (SDImageCache*)filterdImageCache;
++ (SDImageCache*)originalImageCache;
 
 @end

@@ -1,53 +1,21 @@
 PODS:
-  - AFNetworking (2.5.0):
-    - AFNetworking/NSURLConnection (= 2.5.0)
-    - AFNetworking/NSURLSession (= 2.5.0)
-    - AFNetworking/Reachability (= 2.5.0)
-    - AFNetworking/Security (= 2.5.0)
-    - AFNetworking/Serialization (= 2.5.0)
-    - AFNetworking/UIKit (= 2.5.0)
-  - AFNetworking/NSURLConnection (2.5.0):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.5.0):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.5.0)
-  - AFNetworking/Security (2.5.0)
-  - AFNetworking/Serialization (2.5.0)
-  - AFNetworking/UIKit (2.5.0):
-    - AFNetworking/NSURLConnection
-    - AFNetworking/NSURLSession
   - MD5Digest (0.1.0)
   - SDWebImage (3.7.1):
     - SDWebImage/Core (= 3.7.1)
   - SDWebImage/Core (3.7.1)
-  - TKRGuard (1.0.2)
-  - TMCache (1.2.3)
-  - YSFileManager (0.0.3)
-  - YSImageFilter (0.1.4)
+  - YSImageFilter (0.1.5)
   - YSUIKitAdditions (0.0.20)
 
 DEPENDENCIES:
-  - AFNetworking (~> 2.0)
   - MD5Digest
   - SDWebImage
-  - TKRGuard
-  - TMCache
-  - YSFileManager
   - YSImageFilter
   - YSUIKitAdditions
 
 SPEC CHECKSUMS:
-  AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
   MD5Digest: 058b7162b1fc8c30feddf10bfe66e0565797c45f
   SDWebImage: 116e88633b5b416ea0ca4b334a4ac59cf72dd38d
-  TKRGuard: 6d32f212e5d7fb55b6e849b1acc35873fa1f0cbb
-  TMCache: 11589ef8c40909114a5e60132711c9a559e01d97
-  YSFileManager: 861157ba9b5dcdeebcf6240a9649f9604d460326
-  YSImageFilter: f50984e00db3a494cd600fc03481a62a6cae86ae
+  YSImageFilter: c743218c413a7cb617913539cfc03076dcb9533e
   YSUIKitAdditions: 9bf493546d882acc409123a9532aba4233f73290
 
 COCOAPODS: 0.35.0
