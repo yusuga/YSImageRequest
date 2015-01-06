@@ -8,6 +8,7 @@
 
 #import "TableViewCell.h"
 #import "UIImageView+YSImageRequest.h"
+#import "YSImageRequest.h"
 
 #import <YSUIKitAdditions/UIImage+YSUIKitAdditions.h>
 
@@ -34,7 +35,9 @@ static CGFloat const kImageSize = 50.f;
     filter.mask = YSImageFilterMaskRoundedCorners;
     filter.borderWidth = 5.f;
     filter.borderColor = [UIColor redColor];
-    filter.maskCornerRadius = 0.f;
+    filter.maskCornerRadius = 10.f;
+    
+    NSLog(@"filterdImage cache = %@;", [YSImageRequest cachedFilteredImageForURL:url filter:filter] ? @"OK" : @"None");
     
     __block UIActivityIndicatorView *activityIndicator;
     __weak UIImageView *weakImageView = self.imageView;

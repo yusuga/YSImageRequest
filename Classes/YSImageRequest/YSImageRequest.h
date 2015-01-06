@@ -21,6 +21,9 @@ typedef void(^YSImageRequestCompletion)(YSImageRequest *request, UIImage *image,
                                                     progress:(SDWebImageDownloaderProgressBlock)progressBlock
                                                   completion:(YSImageRequestCompletion)completion;
 
++ (UIImage *)cachedFilteredImageForURL:(NSURL *)url
+                                filter:(YSImageFilter*)filter;
+
 - (void)cancel;
 @property (nonatomic, readonly, getter = isCancelled) BOOL cancelled;
 

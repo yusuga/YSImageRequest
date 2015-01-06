@@ -99,6 +99,12 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
     }];
 }
 
++ (UIImage *)cachedFilteredImageForURL:(NSURL *)url
+                                filter:(YSImageFilter*)filter
+{
+    return [[self filteredImageCache] imageFromMemoryCacheForKey:memoryCacheKeyFromURL(url, filter)];
+}
+
 #pragma mark - Cache
 
 + (SDImageCache*)filteredImageCache
