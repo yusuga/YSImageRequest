@@ -69,12 +69,12 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 {
     NSString *memoryCacheKey = memoryCacheKeyFromURL(url, filter);
     
-    SDImageCache *filterdImageCache = [[self class] filterdImageCache];
+    SDImageCache *filteredImageCache = [[self class] filteredImageCache];
     
     if (!(options & SDWebImageRefreshCached)) {
-        UIImage *filterdImage = [filterdImageCache imageFromMemoryCacheForKey:memoryCacheKey];
-        if (filterdImage) {
-            if (completion) completion(self, filterdImage, nil);
+        UIImage *filteredImage = [filteredImageCache imageFromMemoryCacheForKey:memoryCacheKey];
+        if (filteredImage) {
+            if (completion) completion(self, filteredImage, nil);
             return;
         }
     }
@@ -86,12 +86,12 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
         if (!wself) return ;
         
         if (image) {
-            [image ys_filter:filter withCompletion:^(UIImage *filterdImage) {
+            [image ys_filter:filter withCompletion:^(UIImage *filteredImage) {
                 if (!wself) return ;
                 
-                [filterdImageCache storeImage:filterdImage forKey:memoryCacheKey toDisk:NO];
+                [filteredImageCache storeImage:filteredImage forKey:memoryCacheKey toDisk:NO];
                 [imageManager.imageCache removeImageForKey:[imageManager cacheKeyForURL:url] fromDisk:NO];
-                if (completion) completion(wself, filterdImage, nil);
+                if (completion) completion(wself, filteredImage, nil);
             }];
         } else {
             if (completion) completion(wself, image, error);
@@ -101,7 +101,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 
 #pragma mark - Cache
 
-+ (SDImageCache*)filterdImageCache
++ (SDImageCache*)filteredImageCache
 {
     static id __cache;
     static dispatch_once_t onceToken;

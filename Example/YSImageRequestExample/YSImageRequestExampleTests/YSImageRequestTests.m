@@ -20,8 +20,8 @@
 {
     [super setUp];
     
-    [[YSImageRequest filterdImageCache] clearMemory];
-    [[YSImageRequest filterdImageCache] clearDisk];
+    [[YSImageRequest filteredImageCache] clearMemory];
+    [[YSImageRequest filteredImageCache] clearDisk];
     [[YSImageRequest originalImageCache] clearMemory];
     [[YSImageRequest originalImageCache] clearDisk];
 }

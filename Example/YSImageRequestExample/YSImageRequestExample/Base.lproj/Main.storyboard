@@ -58,9 +58,9 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="D2T-qu-wdJ">
-                        <barButtonItem key="rightBarButtonItem" title="rm filterd memory" id="2dH-F5-ry3">
+                        <barButtonItem key="rightBarButtonItem" title="rm filtered memory" id="2dH-F5-ry3">
                             <connections>
-                                <action selector="removeFilterdImageCacheButtonDidPush:" destination="YcZ-Re-yeC" id="DT8-Sd-RKY"/>
+                                <action selector="removeFilteredImageCacheButtonDidPush:" destination="YcZ-Re-yeC" id="Zlp-fJ-fut"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

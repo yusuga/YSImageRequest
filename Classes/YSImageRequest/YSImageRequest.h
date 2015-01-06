@@ -24,7 +24,7 @@ typedef void(^YSImageRequestCompletion)(YSImageRequest *request, UIImage *image,
 - (void)cancel;
 @property (nonatomic, readonly, getter = isCancelled) BOOL cancelled;
 
-+ (SDImageCache*)filterdImageCache;
++ (SDImageCache*)filteredImageCache;
 + (SDImageCache*)originalImageCache;
 
 @end

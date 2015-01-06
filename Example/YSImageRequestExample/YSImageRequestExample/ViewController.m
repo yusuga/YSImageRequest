@@ -53,10 +53,10 @@ static NSString * const kCellIdentifier = @"Cell";
 
 #pragma mark - Button action
 
-- (IBAction)removeFilterdImageCacheButtonDidPush:(id)sender
+- (IBAction)removeFilteredImageCacheButtonDidPush:(id)sender
 {
-    [[YSImageRequest filterdImageCache] clearMemory];
-    [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"Remove all filterd image cache." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    [[YSImageRequest filteredImageCache] clearMemory];
+    [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"Remove all filtered image cache." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
 
 - (IBAction)removeOriginalImageMemoryCacheButtonDidPush:(id)sender
