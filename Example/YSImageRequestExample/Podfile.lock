@@ -1,9 +1,9 @@
 PODS:
   - MD5Digest (0.1.0)
-  - SDWebImage (3.7.1):
-    - SDWebImage/Core (= 3.7.1)
-  - SDWebImage/Core (3.7.1)
-  - YSImageFilter (0.1.6)
+  - SDWebImage (3.7.2):
+    - SDWebImage/Core (= 3.7.2)
+  - SDWebImage/Core (3.7.2)
+  - YSImageFilter (0.1.7)
   - YSUIKitAdditions (0.0.20)
 
 DEPENDENCIES:
@@ -13,9 +13,9 @@ DEPENDENCIES:
   - YSUIKitAdditions
 
 SPEC CHECKSUMS:
-  MD5Digest: 058b7162b1fc8c30feddf10bfe66e0565797c45f
-  SDWebImage: 116e88633b5b416ea0ca4b334a4ac59cf72dd38d
-  YSImageFilter: 92f16acb7a16dfe1f35353d885713b78bf39a6cc
+  MD5Digest: 99bcccfc389c5b7a0edaf66beb80fbc7596a3b65
+  SDWebImage: 71b7cdc1d1721d6a82ed62889030225f2c249e29
+  YSImageFilter: c5aaf64c9cd71c308e138476840145bcece3ff75
   YSUIKitAdditions: 9bf493546d882acc409123a9532aba4233f73290
 
 COCOAPODS: 0.35.0
