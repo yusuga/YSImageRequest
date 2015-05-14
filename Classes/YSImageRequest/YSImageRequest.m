@@ -37,11 +37,11 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 @interface YSImageRequest ()
 
 @property (nonatomic) id <SDWebImageOperation> operation;
+@property (nonatomic, readwrite, getter = isCancelled) BOOL cancelled;
 
 @end
 
 @implementation YSImageRequest
-@synthesize cancelled = _cancelled;
 
 - (void)dealloc
 {
@@ -126,23 +126,9 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 
 - (void)cancel
 {
+    self.cancelled = YES;
     [self.operation cancel];
     self.operation = nil;
-    [self setCancelled:YES];
-}
-
-- (void)setCancelled:(BOOL)cancelled
-{
-    @synchronized(self) {
-        _cancelled = cancelled;
-    }
-}
-
-- (BOOL)isCancelled
-{
-    @synchronized(self) {
-        return _cancelled;
-    }
 }
 
 @end
