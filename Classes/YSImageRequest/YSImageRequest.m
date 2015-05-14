@@ -36,7 +36,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 
 @interface YSImageRequest ()
 
-@property (nonatomic) id <SDWebImageOperation> operation;
+@property (weak, nonatomic) id <SDWebImageOperation> operation;
 @property (nonatomic, readwrite, getter = isCancelled) BOOL cancelled;
 
 @end
@@ -67,6 +67,8 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
                    progress:(SDWebImageDownloaderProgressBlock)progressBlock
                  completion:(YSImageRequestCompletion)completion
 {
+    NSParameterAssert([NSThread isMainThread]);
+    
     NSString *memoryCacheKey = memoryCacheKeyFromURL(url, filter);
     
     SDImageCache *filteredImageCache = [[self class] filteredImageCache];
@@ -83,10 +85,12 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
     
     __weak typeof(self) wself = self;
     self.operation = [imageManager downloadImageWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        NSParameterAssert([NSThread isMainThread]);
         if (!wself) return ;
         
         if (image) {
             [image ys_filter:filter withCompletion:^(UIImage *filteredImage) {
+                NSParameterAssert([NSThread isMainThread]);
                 if (!wself) return ;
                 
                 [filteredImageCache storeImage:filteredImage forKey:memoryCacheKey toDisk:NO];
@@ -102,6 +106,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 + (UIImage *)cachedFilteredImageForURL:(NSURL *)url
                                 filter:(YSImageFilter*)filter
 {
+    NSParameterAssert([NSThread isMainThread]);
     return [[self filteredImageCache] imageFromMemoryCacheForKey:memoryCacheKeyFromURL(url, filter)];
 }
 
@@ -126,9 +131,11 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 
 - (void)cancel
 {
-    self.cancelled = YES;
-    [self.operation cancel];
-    self.operation = nil;
+    if (self.operation) {
+        self.cancelled = YES;
+        [self.operation cancel];
+        self.operation = nil;
+    }
 }
 
 @end
