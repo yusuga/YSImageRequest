@@ -12,13 +12,14 @@
 @class YSImageRequest;
 
 typedef void(^YSImageRequestCompletion)(YSImageRequest *request, UIImage *image, NSError *error);
+typedef void(^YSImageRequestProgress)(NSInteger receivedSize, NSInteger expectedSize, CGFloat progress);
 
 @interface YSImageRequest : NSObject <SDWebImageOperation>
 
 + (YSImageRequest <SDWebImageOperation>*)requestImageWithURL:(NSURL*)url
                                                      options:(SDWebImageOptions)options
                                                       filter:(YSImageFilter*)filter
-                                                    progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                                                    progress:(YSImageRequestProgress)progressBlock
                                                   completion:(YSImageRequestCompletion)completion;
 
 + (UIImage *)cachedFilteredImageForURL:(NSURL *)url

@@ -39,7 +39,7 @@ static NSString * const kYSImageRequestOperationKey = @"YSImageRequest";
     [self ys_setImageWithURL:url placeholderImage:placeholder options:0 filter:filter progress:nil completion:completion];
 }
 
-- (void)ys_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder filter:(YSImageFilter*)filter progress:(SDWebImageDownloaderProgressBlock)progressBlock completion:(YSImageRequestImageViewCompletion)completion
+- (void)ys_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder filter:(YSImageFilter*)filter progress:(YSImageRequestProgress)progressBlock completion:(YSImageRequestImageViewCompletion)completion
 {
     [self ys_setImageWithURL:url placeholderImage:placeholder options:0 filter:filter progress:progressBlock completion:completion];
 }
@@ -49,7 +49,7 @@ static NSString * const kYSImageRequestOperationKey = @"YSImageRequest";
     [self ys_setImageWithURL:url placeholderImage:placeholder options:options filter:filter progress:nil completion:completion];
 }
 
-- (void)ys_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options filter:(YSImageFilter*)filter progress:(SDWebImageDownloaderProgressBlock)progressBlock completion:(YSImageRequestImageViewCompletion)completion
+- (void)ys_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options filter:(YSImageFilter*)filter progress:(YSImageRequestProgress)progressBlock completion:(YSImageRequestImageViewCompletion)completion
 {
     [self ys_cancelCurrentImageLoad];
     

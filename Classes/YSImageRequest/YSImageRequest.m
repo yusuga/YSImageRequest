@@ -53,7 +53,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 + (YSImageRequest<SDWebImageOperation> *)requestImageWithURL:(NSURL *)url
                                                      options:(SDWebImageOptions)options
                                                       filter:(YSImageFilter*)filter
-                                                    progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                                                    progress:(YSImageRequestProgress)progressBlock
                                                   completion:(YSImageRequestCompletion)completion
 {
     YSImageRequest *req = [[YSImageRequest alloc] init];
@@ -64,7 +64,7 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 - (void)requestImageWithURL:(NSURL*)url
                     options:(SDWebImageOptions)options
                      filter:(YSImageFilter*)filter
-                   progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                   progress:(YSImageRequestProgress)progressBlock
                  completion:(YSImageRequestCompletion)completion
 {
     NSParameterAssert([NSThread isMainThread]);
@@ -84,14 +84,18 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
     SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
     
     __weak typeof(self) wself = self;
-    self.operation = [imageManager downloadImageWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    self.operation = [imageManager downloadImageWithURL:url options:options progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (progressBlock) progressBlock(receivedSize, expectedSize, (CGFloat)receivedSize/expectedSize);
+        });
+    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         NSParameterAssert([NSThread isMainThread]);
-        if (!wself) return ;
+        if (!wself || wself.isCancelled) return ;
         
         if (image) {
             [image ys_filter:filter withCompletion:^(UIImage *filteredImage) {
                 NSParameterAssert([NSThread isMainThread]);
-                if (!wself) return ;
+                if (!wself || wself.isCancelled) return ;
                 
                 [filteredImageCache storeImage:filteredImage forKey:memoryCacheKey toDisk:NO];
                 [imageManager.imageCache removeImageForKey:[imageManager cacheKeyForURL:url] fromDisk:NO];

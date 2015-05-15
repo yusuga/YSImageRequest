@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <SDWebImage/SDWebImageManager.h>
 #import <YSImageFilter/UIImage+YSImageFilter.h>
+#import "YSImageRequest.h"
 
 typedef void(^YSImageRequestImageViewCompletion)(UIImage *image, NSError *error);
 
@@ -38,7 +39,7 @@ typedef void(^YSImageRequestImageViewCompletion)(UIImage *image, NSError *error)
 - (void)ys_setImageWithURL:(NSURL *)url
           placeholderImage:(UIImage *)placeholder
                     filter:(YSImageFilter*)filter
-                  progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                  progress:(YSImageRequestProgress)progressBlock
                 completion:(YSImageRequestImageViewCompletion)completion;
 
 - (void)ys_setImageWithURL:(NSURL *)url
@@ -50,7 +51,7 @@ typedef void(^YSImageRequestImageViewCompletion)(UIImage *image, NSError *error)
           placeholderImage:(UIImage *)placeholder
                    options:(SDWebImageOptions)options
                     filter:(YSImageFilter*)filter
-                  progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                  progress:(YSImageRequestProgress)progressBlock
                 completion:(YSImageRequestImageViewCompletion)completion;
 
 @end
