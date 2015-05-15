@@ -11,10 +11,13 @@
 #import "YSImageRequest.h"
 
 #import <YSUIKitAdditions/UIImage+YSUIKitAdditions.h>
+#import <M13ProgressSuite/M13ProgressViewPie.h>
 
 static CGFloat const kImageSize = 50.f;
 
 @interface TableViewCell ()
+
+@property (nonatomic) M13ProgressViewPie *progressView;
 
 @end
 
@@ -23,6 +26,15 @@ static CGFloat const kImageSize = 50.f;
 - (void)awakeFromNib
 {
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.progressView = [[M13ProgressViewPie alloc] initWithFrame:CGRectMake(0.f, 0.f, 30.f, 30.f)];
+    self.progressView.alpha = 0.f;
+    [self.imageView addSubview:self.progressView];    
+}
+
+- (void)prepareForReuse
+{
+    [self.progressView setProgress:0.f animated:NO];
+    self.progressView.alpha = 0.f;
 }
 
 - (void)setImageWithURL:(NSURL*)url
@@ -39,24 +51,27 @@ static CGFloat const kImageSize = 50.f;
     
     NSLog(@"filterdImage cache = %@;", [YSImageRequest cachedFilteredImageForURL:url filter:filter] ? @"OK" : @"None");
     
-    __block UIActivityIndicatorView *activityIndicator;
-    __weak UIImageView *weakImageView = self.imageView;
-    
+    __weak typeof(self) wself = self;
     [self.imageView ys_setImageWithURL:url
                       placeholderImage:[[self class] placeholderImage]
                                 filter:filter
-                              progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-                                  if (!activityIndicator) {
-                                      [weakImageView addSubview:activityIndicator = [UIActivityIndicatorView.alloc initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]];
-                                      activityIndicator.center = CGPointMake(kImageSize/2.f, kImageSize/2.f);
-                                      [activityIndicator startAnimating];
+                              progress:^(NSInteger receivedSize, NSInteger expectedSize, CGFloat progress) {
+                                  if (wself.progressView.alpha == 0.f) {
+                                      wself.progressView.center = CGPointMake(kImageSize/2.f, kImageSize/2.f);
+                                      
+                                      [UIView animateWithDuration:0.1 animations:^{
+                                          wself.progressView.alpha = 1.f;
+                                      }];
                                   }
+                                  NSLog(@"progress: %f", progress);
+                                  [wself.progressView setProgress:progress animated:YES];
                               } completion:^(UIImage *image, NSError *error) {
                                   if (error) {
                                       NSLog(@"error = %@;", error);
                                   }
-                                  [activityIndicator removeFromSuperview];
-                                  activityIndicator = nil;
+                                  [UIView animateWithDuration:0.1 animations:^{
+                                      wself.progressView.alpha = 0.f;
+                                  }];
                               }];
 }
 

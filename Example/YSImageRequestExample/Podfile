@@ -7,3 +7,4 @@ pod 'MD5Digest'
 pod 'YSImageFilter'
 
 pod 'YSUIKitAdditions'
+pod 'M13ProgressSuite'

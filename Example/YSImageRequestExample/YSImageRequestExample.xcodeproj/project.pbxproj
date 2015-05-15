@@ -465,12 +465,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-l\"Pods-AFNetworking\"",
 					"-l\"Pods-MD5Digest\"",
 					"-l\"Pods-SDWebImage\"",
-					"-l\"Pods-TKRGuard\"",
-					"-l\"Pods-TMCache\"",
-					"-l\"Pods-YSFileManager\"",
 					"-l\"Pods-YSImageFilter\"",
 					"-l\"Pods-YSUIKitAdditions\"",
 					"-framework",
@@ -506,12 +502,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-l\"Pods-AFNetworking\"",
 					"-l\"Pods-MD5Digest\"",
 					"-l\"Pods-SDWebImage\"",
-					"-l\"Pods-TKRGuard\"",
-					"-l\"Pods-TMCache\"",
-					"-l\"Pods-YSFileManager\"",
 					"-l\"Pods-YSImageFilter\"",
 					"-l\"Pods-YSUIKitAdditions\"",
 					"-framework",
