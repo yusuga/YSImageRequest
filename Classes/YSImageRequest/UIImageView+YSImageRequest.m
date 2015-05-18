@@ -51,33 +51,30 @@ static NSString * const kYSImageRequestOperationKey = @"YSImageRequest";
 
 - (void)ys_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options filter:(YSImageFilter*)filter progress:(YSImageRequestProgress)progressBlock completion:(YSImageRequestImageViewCompletion)completion
 {
+    NSParameterAssert([NSThread isMainThread]);
+    
     [self ys_cancelCurrentImageLoad];
     
     if (!(options & SDWebImageDelayPlaceholder)) {
-        dispatch_main_async_safe(^{
-            self.image = placeholder;
-        });
+        self.image = placeholder;
     }
     
     if (url) {
         __weak UIImageView *wself = self;
-        id <SDWebImageOperation> operation = [YSImageRequest requestImageWithURL:url options:options filter:filter progress:progressBlock completion:^(YSImageRequest *request, UIImage *image, NSError *error) {            
-            if (!wself) return;            
-            dispatch_main_sync_safe(^{
-                if (!wself) return;
-                if (image) {
-                    wself.image = image;
-                    [wself setNeedsLayout];
-                } else {
-                    if ((options & SDWebImageDelayPlaceholder)) {
-                        wself.image = placeholder;
-                        [wself setNeedsLayout];
-                    }
+        id <SDWebImageOperation> operation = [YSImageRequest requestImageWithURL:url options:options filter:filter progress:progressBlock completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
+            NSParameterAssert([NSThread isMainThread]);
+            if (!wself || request.isCancelled) return;
+            
+            if (image) {
+                wself.image = image;
+            } else {
+                if ((options & SDWebImageDelayPlaceholder)) {
+                    wself.image = placeholder;
                 }
-                if (completion) {
-                    completion(image, error);
-                }
-            });
+            }
+            if (completion) {
+                completion(image, error);
+            }
         }];
         [self sd_setImageLoadOperation:operation forKey:kYSImageRequestOperationKey];
     } else {

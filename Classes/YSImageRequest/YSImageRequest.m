@@ -135,11 +135,9 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 
 - (void)cancel
 {
-    if (self.operation) {
-        self.cancelled = YES;
-        [self.operation cancel];
-        self.operation = nil;
-    }
+    self.cancelled = YES;
+    [self.operation cancel];
+    self.operation = nil;
 }
 
 @end
