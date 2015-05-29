@@ -31,4 +31,8 @@ typedef void(^YSImageRequestProgress)(NSInteger receivedSize, NSInteger expected
 + (SDImageCache*)filteredImageCache;
 + (SDImageCache*)originalImageCache;
 
++ (void)storeFilteredImage:(UIImage *)image
+                   withURL:(NSURL *)url
+                    filter:(YSImageFilter *)filter;
+
 @end

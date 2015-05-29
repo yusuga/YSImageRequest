@@ -114,6 +114,13 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
     return [[self filteredImageCache] imageFromMemoryCacheForKey:memoryCacheKeyFromURL(url, filter)];
 }
 
++ (void)storeFilteredImage:(UIImage *)image
+                   withURL:(NSURL *)url
+                    filter:(YSImageFilter *)filter
+{
+    [[self filteredImageCache] storeImage:image forKey:memoryCacheKeyFromURL(url, filter) toDisk:NO];
+}
+
 #pragma mark - Cache
 
 + (SDImageCache*)filteredImageCache
