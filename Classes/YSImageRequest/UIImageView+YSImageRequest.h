@@ -54,4 +54,6 @@ typedef void(^YSImageRequestImageViewCompletion)(UIImage *image, NSError *error)
                   progress:(YSImageRequestProgress)progressBlock
                 completion:(YSImageRequestImageViewCompletion)completion;
 
+- (void)ys_cancelCurrentImageLoad;
+
 @end
