@@ -465,10 +465,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-l\"Pods-MD5Digest\"",
-					"-l\"Pods-SDWebImage\"",
-					"-l\"Pods-YSImageFilter\"",
-					"-l\"Pods-YSUIKitAdditions\"",
 					"-framework",
 					"\"CoreGraphics\"",
 					"-framework",
@@ -502,10 +498,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-l\"Pods-MD5Digest\"",
-					"-l\"Pods-SDWebImage\"",
-					"-l\"Pods-YSImageFilter\"",
-					"-l\"Pods-YSUIKitAdditions\"",
 					"-framework",
 					"\"CoreGraphics\"",
 					"-framework",

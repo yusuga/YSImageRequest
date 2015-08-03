@@ -104,6 +104,10 @@ static NSString * const kCellIdentifier = @"Cell";
         
         for (NSUInteger i = 0; i < count; i++) {
             [strings addObject:[NSString stringWithFormat:@"http://placehold.it/300x300&text=image%zd", i + 1]];
+//            [strings addObject:[NSString stringWithFormat:@"http://placehold.it/500x500&text=image%zd", i + 1]];
+//            [strings addObject:[NSString stringWithFormat:@"http://placehold.it/1000x1000&text=image%zd", i + 1]];
+//            [strings addObject:[NSString stringWithFormat:@"http://placehold.it/1500x1500&text=image%zd", i + 1]];
+//            [strings addObject:[NSString stringWithFormat:@"http://placehold.it/2000x2000&text=image%zd", i + 1]];
         }
         
         __urlStrings = [NSArray arrayWithArray:strings];

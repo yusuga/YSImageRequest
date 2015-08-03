@@ -1,11 +1,11 @@
 PODS:
   - M13ProgressSuite (1.2.7)
   - MD5Digest (0.1.0)
-  - SDWebImage (3.7.2):
-    - SDWebImage/Core (= 3.7.2)
-  - SDWebImage/Core (3.7.2)
-  - YSImageFilter (0.1.7)
-  - YSUIKitAdditions (0.0.20)
+  - SDWebImage (3.7.3):
+    - SDWebImage/Core (= 3.7.3)
+  - SDWebImage/Core (3.7.3)
+  - YSImageFilter (0.1.8)
+  - YSUIKitAdditions (0.0.24)
 
 DEPENDENCIES:
   - M13ProgressSuite
@@ -17,8 +17,8 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   M13ProgressSuite: 03d194af6359da440641ba758aed5a18b0386a86
   MD5Digest: 99bcccfc389c5b7a0edaf66beb80fbc7596a3b65
-  SDWebImage: 71b7cdc1d1721d6a82ed62889030225f2c249e29
-  YSImageFilter: c5aaf64c9cd71c308e138476840145bcece3ff75
-  YSUIKitAdditions: 9bf493546d882acc409123a9532aba4233f73290
+  SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
+  YSImageFilter: e499b622bfb8b73f89f166b76ac6bc93a82d4d6d
+  YSUIKitAdditions: be64f8be0de4237ce24f2e293f97be61cb391df1
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.38.0
