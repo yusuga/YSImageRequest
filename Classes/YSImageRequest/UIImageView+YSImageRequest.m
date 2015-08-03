@@ -53,36 +53,27 @@ static NSString * const kYSImageRequestOperationKey = @"YSImageRequest";
 {
     NSParameterAssert([NSThread isMainThread]);
     
-    [self ys_cancelCurrentImageLoad];
-    
     if (!(options & SDWebImageDelayPlaceholder)) {
         self.image = placeholder;
     }
     
-    if (url) {
-        __weak UIImageView *wself = self;
-        id <SDWebImageOperation> operation = [YSImageRequest requestImageWithURL:url options:options filter:filter progress:progressBlock completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
-            NSParameterAssert([NSThread isMainThread]);
-            if (!wself || request.isCancelled) return;
-            
-            if (image) {
-                wself.image = image;
-            } else {
-                if ((options & SDWebImageDelayPlaceholder)) {
-                    wself.image = placeholder;
-                }
+    __weak UIImageView *wself = self;
+    id <SDWebImageOperation> operation = [YSImageRequest requestImageWithURL:url options:options filter:filter progress:progressBlock completion:^(YSImageRequest *request, UIImage *image, NSError *error) {
+        NSParameterAssert([NSThread isMainThread]);
+        if (!wself || request.isCancelled) return;        
+        
+        if (image) {
+            wself.image = image;
+        } else {
+            if ((options & SDWebImageDelayPlaceholder)) {
+                wself.image = placeholder;
             }
-            if (completion) {
-                completion(image, error);
-            }
-        }];
-        [self sd_setImageLoadOperation:operation forKey:kYSImageRequestOperationKey];
-    } else {
-        dispatch_main_async_safe(^{
-            NSError *error = [NSError errorWithDomain:@"SDWebImageErrorDomain" code:-1 userInfo:@{NSLocalizedDescriptionKey : @"Trying to load a nil url"}];
-            if (completion) completion(nil, error);
-        });
-    }
+        }
+        if (completion) {
+            completion(image, error);
+        }
+    }];
+    [self sd_setImageLoadOperation:operation forKey:kYSImageRequestOperationKey];
 }
 
 - (void)ys_cancelCurrentImageLoad
