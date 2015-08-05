@@ -3,7 +3,7 @@ source 'https://github.com/yusuga/Specs.git'
 
 platform :ios, '7.0'
 pod 'SDWebImage'
-pod 'MD5Digest'
+pod 'NSString-Hash'
 pod 'YSImageFilter'#, :path => '~/code_public/YSImageFilter/'
 
 pod 'YSUIKitAdditions'

@@ -7,7 +7,7 @@
 //
 
 #import "YSImageRequest.h"
-#import <MD5Digest/NSString+MD5.h>
+#import <NSString-Hash/NSString+Hash.h>
 
 #if DEBUG
 #if 0
@@ -21,7 +21,7 @@
 
 static inline NSString *cacheKeyFromURL(NSURL *url)
 {
-    return url.absoluteString.MD5Digest;
+    return url.absoluteString.md5String;
 }
 
 static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
