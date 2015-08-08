@@ -14,6 +14,11 @@ static NSString * const kYSImageRequestOperationKey = @"YSImageRequest";
 
 @implementation UIImageView (YSImageRequest)
 
+- (void)ys_setImageWithURL:(NSURL *)url
+{
+    [self ys_setImageWithURL:url filter:nil];
+}
+
 - (void)ys_setImageWithURL:(NSURL *)url filter:(YSImageFilter*)filter
 {
     [self ys_setImageWithURL:url placeholderImage:nil options:0 filter:filter progress:nil completion:nil];

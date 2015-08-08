@@ -15,6 +15,8 @@ typedef void(^YSImageRequestImageViewCompletion)(UIImage *image, NSError *error)
 
 @interface UIImageView (YSImageRequest)
 
+- (void)ys_setImageWithURL:(NSURL *)url;
+
 - (void)ys_setImageWithURL:(NSURL *)url
                     filter:(YSImageFilter*)filter;
 
