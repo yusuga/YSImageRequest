@@ -82,10 +82,10 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
         NSParameterAssert([NSThread isMainThread]);
         if (self.isCancelled) return ;
         
-        if (image) {
+        if (image && filter) {
             [image ys_filter:filter withCompletion:^(UIImage *filteredImage) {
                 NSParameterAssert([NSThread isMainThread]);
-                if (self.isCancelled) return ;                
+                if (self.isCancelled) return ;
                 
                 [imageManager.imageCache removeImageForKey:[imageManager cacheKeyForURL:url] fromDisk:NO];
                 [imageManager.imageCache storeImage:filteredImage forKey:cacheKey toDisk:NO];
