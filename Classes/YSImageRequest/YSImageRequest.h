@@ -11,8 +11,8 @@
 #import <YSImageFilter/UIImage+YSImageFilter.h>
 @class YSImageRequest;
 
-typedef void(^YSImageRequestCompletion)(YSImageRequest *request, UIImage *image, NSError *error);
 typedef void(^YSImageRequestProgress)(NSInteger receivedSize, NSInteger expectedSize, CGFloat progress);
+typedef void(^YSImageRequestCompletion)(YSImageRequest *request, UIImage *image, SDImageCacheType cacheType, NSError *error);
 
 @interface YSImageRequest : NSObject <SDWebImageOperation>
 
@@ -28,8 +28,7 @@ typedef void(^YSImageRequestProgress)(NSInteger receivedSize, NSInteger expected
 - (void)cancel;
 @property (nonatomic, readonly, getter = isCancelled) BOOL cancelled;
 
-+ (SDImageCache*)filteredImageCache;
-+ (SDImageCache*)originalImageCache;
++ (SDImageCache*)imageCache;
 
 + (void)storeFilteredImage:(UIImage *)image
                    withURL:(NSURL *)url

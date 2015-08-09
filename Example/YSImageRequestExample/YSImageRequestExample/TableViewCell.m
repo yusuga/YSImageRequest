@@ -28,7 +28,7 @@ static CGFloat const kImageSize = 50.f;
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.progressView = [[M13ProgressViewPie alloc] initWithFrame:CGRectMake(0.f, 0.f, 30.f, 30.f)];
     self.progressView.alpha = 0.f;
-    [self.imageView addSubview:self.progressView];    
+    [self.imageView addSubview:self.progressView];
 }
 
 - (void)prepareForReuse
@@ -52,8 +52,9 @@ static CGFloat const kImageSize = 50.f;
     NSLog(@"filterdImage cache = %@;", [YSImageRequest cachedFilteredImageForURL:url filter:filter] ? @"OK" : @"None");
     
     __weak typeof(self) wself = self;
+#if 1
     [self.imageView ys_setImageWithURL:url
-                      placeholderImage:[[self class] placeholderImage]
+                      placeholderImage:[[self class] placeholderImageWithFilter:filter]
                                 filter:filter
                               progress:^(NSInteger receivedSize, NSInteger expectedSize, CGFloat progress) {
                                   if (wself.progressView.alpha == 0.f) {
@@ -65,22 +66,47 @@ static CGFloat const kImageSize = 50.f;
                                   }
                                   NSLog(@"progress: %f", progress);
                                   [wself.progressView setProgress:progress animated:YES];
-                              } completion:^(UIImage *image, NSError *error) {
+                              } completion:^(UIImage *image, SDImageCacheType cacheType, NSError *error) {
                                   if (error) {
                                       NSLog(@"error = %@;", error);
                                   }
                                   [UIView animateWithDuration:0.1 animations:^{
-                                      wself.progressView.alpha = 0.f;
+                                      wself.progressView.alpha = 0.;
                                   }];
                               }];
+#else
+    [self.imageView ys_setImageWithURL:url
+                      placeholderImage:[[self class] placeholderImageWithFilter:filter]
+                                filter:filter
+                              progress:nil
+                            completion:^(UIImage *image, SDImageCacheType cacheType, NSError *error)
+     {
+         if (error) {
+             NSLog(@"error = %@;", error);
+         }
+         
+         if (cacheType == SDImageCacheTypeNone) {
+             CATransition *transition = [CATransition animation];
+             transition.duration = 0.2f;
+             transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+             transition.type = kCATransitionFade;
+             
+             [wself.imageView.layer addAnimation:transition forKey:nil];
+         }
+     }];
+#endif
 }
 
-+ (UIImage*)placeholderImage
++ (UIImage*)placeholderImageWithFilter:(YSImageFilter *)filter
 {
     static UIImage *__image;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        __image = [UIImage ys_imageFromColor:[UIColor lightGrayColor] withSize:CGSizeMake(kImageSize, kImageSize)];
+        YSImageFilter *newfilter = filter;
+        newfilter.borderWidth = 0.;
+        newfilter.borderColor = nil;
+        __image = [[UIImage ys_imageFromColor:[UIColor lightGrayColor]
+                                     withSize:CGSizeMake(kImageSize, kImageSize)] ys_filter:newfilter];
     });
     return __image;
 }

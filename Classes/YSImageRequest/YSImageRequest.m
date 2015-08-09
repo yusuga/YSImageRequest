@@ -9,16 +9,6 @@
 #import "YSImageRequest.h"
 #import <NSString-Hash/NSString+Hash.h>
 
-#if DEBUG
-#if 0
-#define LOG_YSIMAGE_REQUEST(...) NSLog(__VA_ARGS__)
-#endif
-#endif
-
-#ifndef LOG_YSIMAGE_REQUEST
-#define LOG_YSIMAGE_REQUEST(...)
-#endif
-
 static inline NSString *cacheKeyFromURL(NSURL *url)
 {
     return url.absoluteString.md5String;
@@ -26,11 +16,10 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 
 static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 {
-    CGSize size = filter.size;
-    if (filter.mask == YSImageFilterMaskRoundedCorners) {
-        return [NSString stringWithFormat:@"%@%@%.0f%.0f%.0f", cacheKeyFromURL(url), @(filter.trimToFit), size.width, size.height, filter.maskCornerRadius];
+    if (filter.maxResolution > 0.) {
+        return [NSString stringWithFormat:@"%@,%.0f,%d,%d,%zd,%.0f", cacheKeyFromURL(url), filter.maxResolution, filter.quality, filter.trimToFit ? 1 : 0, filter.mask, filter.maskCornerRadius];
     } else {
-        return [NSString stringWithFormat:@"%@%@%.0f%.0f", cacheKeyFromURL(url), @(filter.trimToFit), size.width, size.height];
+        return [NSString stringWithFormat:@"%@,%.0f,%.0f,%d,%d,%zd,%.0f", cacheKeyFromURL(url), filter.size.width, filter.size.height, filter.quality, filter.trimToFit ? 1 : 0, filter.mask, filter.maskCornerRadius];
     }
 }
 
@@ -43,9 +32,14 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 
 @implementation YSImageRequest
 
-- (void)dealloc
++ (instancetype)sharedInstance
 {
-    LOG_YSIMAGE_REQUEST(@"%s, %p", __func__, self);
+    static id __instance;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        __instance =  [[self alloc] init];
+    });
+    return __instance;
 }
 
 #pragma mark - Request
@@ -69,19 +63,16 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 {
     NSParameterAssert([NSThread isMainThread]);
     
-    NSString *memoryCacheKey = memoryCacheKeyFromURL(url, filter);
-    
-    SDImageCache *filteredImageCache = [[self class] filteredImageCache];
+    SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
+    NSString *cacheKey = memoryCacheKeyFromURL(url, filter);
     
     if (!(options & SDWebImageRefreshCached)) {
-        UIImage *filteredImage = [filteredImageCache imageFromMemoryCacheForKey:memoryCacheKey];
+        UIImage *filteredImage = [imageManager.imageCache imageFromMemoryCacheForKey:cacheKey];
         if (filteredImage) {
-            if (completion) completion(self, filteredImage, nil);
+            if (completion) completion(self, filteredImage, SDImageCacheTypeMemory, nil);
             return;
         }
     }
-    
-    SDWebImageManager *imageManager = [SDWebImageManager sharedManager];
     
     self.operation = [imageManager downloadImageWithURL:url options:options progress:^(NSInteger receivedSize, NSInteger expectedSize) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -94,14 +85,15 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
         if (image) {
             [image ys_filter:filter withCompletion:^(UIImage *filteredImage) {
                 NSParameterAssert([NSThread isMainThread]);
-                if (self.isCancelled) return ;
+                if (self.isCancelled) return ;                
                 
-                [filteredImageCache storeImage:filteredImage forKey:memoryCacheKey toDisk:NO];
                 [imageManager.imageCache removeImageForKey:[imageManager cacheKeyForURL:url] fromDisk:NO];
-                if (completion) completion(self, filteredImage, nil);
+                [imageManager.imageCache storeImage:filteredImage forKey:cacheKey toDisk:NO];
+                
+                if (completion) completion(self, filteredImage, cacheType, nil);
             }];
         } else {
-            if (completion) completion(self, image, error);
+            if (completion) completion(self, image, cacheType, error);
         }
     }];
 }
@@ -110,29 +102,20 @@ static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
                                 filter:(YSImageFilter*)filter
 {
     NSParameterAssert([NSThread isMainThread]);
-    return [[self filteredImageCache] imageFromMemoryCacheForKey:memoryCacheKeyFromURL(url, filter)];
+    return [[self imageCache] imageFromMemoryCacheForKey:memoryCacheKeyFromURL(url, filter)];
 }
 
 + (void)storeFilteredImage:(UIImage *)image
                    withURL:(NSURL *)url
                     filter:(YSImageFilter *)filter
 {
-    [[self filteredImageCache] storeImage:image forKey:memoryCacheKeyFromURL(url, filter) toDisk:NO];
+    NSParameterAssert([NSThread isMainThread]);
+    [[self imageCache] storeImage:image forKey:memoryCacheKeyFromURL(url, filter) toDisk:NO];
 }
 
 #pragma mark - Cache
 
-+ (SDImageCache*)filteredImageCache
-{
-    static id __cache;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        __cache = [[SDImageCache alloc] initWithNamespace:NSStringFromClass([self class])];
-    });
-    return __cache;
-}
-
-+ (SDImageCache*)originalImageCache
++ (SDImageCache*)imageCache
 {
     return [SDWebImageManager sharedManager].imageCache;
 }

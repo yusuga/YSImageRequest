@@ -53,21 +53,16 @@ static NSString * const kCellIdentifier = @"Cell";
 
 #pragma mark - Button action
 
-- (IBAction)removeFilteredImageCacheButtonDidPush:(id)sender
+- (IBAction)removeImageCacheButtonDidPush:(id)sender
 {
-    [[YSImageRequest filteredImageCache] clearMemory];
-    [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"Remove all filtered image cache." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    [[YSImageRequest imageCache] clearMemory];
+    [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"Remove all image memory cache." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
 
-- (IBAction)removeOriginalImageMemoryCacheButtonDidPush:(id)sender
+- (IBAction)removeImageDiskCacheButtonDidPush:(id)sender
 {
-    [[YSImageRequest originalImageCache] clearMemory];
-    [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"Remove all original image memory cache." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-}
-- (IBAction)removeOriginalImageDiskCacheButtonDidPush:(id)sender
-{
-    [[YSImageRequest originalImageCache] clearDiskOnCompletion:^{
-        [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"Remove all original image disk cache." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    [[YSImageRequest imageCache] clearDiskOnCompletion:^{
+        [[[UIAlertView alloc] initWithTitle:@"Completion" message:@"Remove all image disk cache." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
 }
 

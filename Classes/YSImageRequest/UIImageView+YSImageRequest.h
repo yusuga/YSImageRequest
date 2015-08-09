@@ -11,7 +11,7 @@
 #import <YSImageFilter/UIImage+YSImageFilter.h>
 #import "YSImageRequest.h"
 
-typedef void(^YSImageRequestImageViewCompletion)(UIImage *image, NSError *error);
+typedef void(^YSImageRequestImageViewCompletion)(UIImage *image, SDImageCacheType cacheType, NSError *error);
 
 @interface UIImageView (YSImageRequest)
 
