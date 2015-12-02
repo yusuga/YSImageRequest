@@ -16,11 +16,7 @@ static inline NSString *cacheKeyFromURL(NSURL *url)
 
 static inline NSString *memoryCacheKeyFromURL(NSURL *url, YSImageFilter *filter)
 {
-    if (filter.maxResolution > 0.) {
-        return [NSString stringWithFormat:@"%@,%.0f,%d,%d,%zd,%.0f", cacheKeyFromURL(url), filter.maxResolution, filter.quality, filter.trimToFit ? 1 : 0, filter.mask, filter.maskCornerRadius];
-    } else {
-        return [NSString stringWithFormat:@"%@,%.0f,%.0f,%d,%d,%zd,%.0f", cacheKeyFromURL(url), filter.size.width, filter.size.height, filter.quality, filter.trimToFit ? 1 : 0, filter.mask, filter.maskCornerRadius];
-    }
+    return [NSString stringWithFormat:@"%@%tu", cacheKeyFromURL(url), filter.hash];
 }
 
 @interface YSImageRequest ()
