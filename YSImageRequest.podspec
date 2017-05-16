@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/YSImageRequest/*.{h,m}'
   s.requires_arc = true
   
-  s.dependency 'SDWebImage'
+  s.dependency 'SDWebImage', '~> 3.0'
   s.dependency 'NSString-Hash'
   s.dependency 'YSImageFilter'
   
