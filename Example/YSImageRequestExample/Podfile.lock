@@ -1,24 +1,29 @@
 PODS:
-  - M13ProgressSuite (1.2.7)
+  - M13ProgressSuite (1.2.9)
   - NSString-Hash (0.0.1)
-  - SDWebImage (3.7.3):
-    - SDWebImage/Core (= 3.7.3)
-  - SDWebImage/Core (3.7.3)
-  - YSImageFilter (0.1.9)
-  - YSUIKitAdditions (0.0.24)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+  - YSImageFilter (0.1.11)
+  - YSNSFoundationAdditions (0.0.21)
+  - YSUIKitAdditions (0.0.31):
+    - YSNSFoundationAdditions
 
 DEPENDENCIES:
   - M13ProgressSuite
   - NSString-Hash
-  - SDWebImage
+  - SDWebImage (~> 3.0)
   - YSImageFilter
   - YSUIKitAdditions
 
 SPEC CHECKSUMS:
-  M13ProgressSuite: 03d194af6359da440641ba758aed5a18b0386a86
+  M13ProgressSuite: ea9f7263e73e9215e6849dfa54e29ee0ad6a145c
   NSString-Hash: 59c428d8a5f0f85ec443ef9865107832b8a845e7
-  SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
-  YSImageFilter: 5b05f4e6eca5915f51a9886a769ea737565e3034
-  YSUIKitAdditions: be64f8be0de4237ce24f2e293f97be61cb391df1
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+  YSImageFilter: af1bd4a0ef15eb7e9d1099f907849c31b4461cb3
+  YSNSFoundationAdditions: 8aad188bbf89003fc97fd0c1727aabfba2d38430
+  YSUIKitAdditions: e4d9317d04e520f1a5f882237b528fff3677631a
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 342c72b5c4338e9934f6290eba4f64f4ac05d826
+
+COCOAPODS: 1.2.0

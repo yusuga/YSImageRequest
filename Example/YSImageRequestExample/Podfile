@@ -1,10 +1,19 @@
+platform :ios, '7.0'
+
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/yusuga/Specs.git'
 
-platform :ios, '7.0'
-pod 'SDWebImage'
-pod 'NSString-Hash'
-pod 'YSImageFilter'#, :path => '~/code_public/YSImageFilter/'
+target 'YSImageRequestExample' do
+  pod 'SDWebImage', '~> 3.0'
+  pod 'NSString-Hash'
+  pod 'YSImageFilter'#, :path => '~/code_public/YSImageFilter/'
+  
+  pod 'YSUIKitAdditions'
+  pod 'M13ProgressSuite'
 
-pod 'YSUIKitAdditions'
-pod 'M13ProgressSuite'
+  target 'YSImageRequestExampleTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
